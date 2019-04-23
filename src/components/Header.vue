@@ -9,13 +9,13 @@
       </div>
     </div>
     <div class="right">
-      <div class="btn-fullscreen">
-        <el-tooltip class="item" effect="dark" :content="fullscreen?`取消全屏`:`全屏`" placement="bottom">
-          <svg-icon icon-class="box" class="fullscreen-icon" />
+      <div class="btn-fullscreen" @click="handleFullScreen">
+        <el-tooltip effect="dark" :content="fullscreen?`取消全屏`:`全屏`" placement="bottom">
+          <svg-icon icon-class="box" class="fullscreen-icon"/>
         </el-tooltip>
       </div>
-      <div class="btn-message-tip">
-        <el-tooltip class="item" effect="dark" :content="message ? `有${message}条消息` :`消息中心`" placement="bottom">
+      <div class="btn-message-tip" @click="messageTips">
+        <el-tooltip class="btn-message-tip" effect="dark" :content="message ? `有${message}条消息` :`消息中心`" placement="bottom">
           <svg-icon icon-class="o" class="fullscreen-icon" />
         </el-tooltip>
       </div>
@@ -78,6 +78,38 @@ export default {
         await this.$store.dispatch('login/setSignOut') // 命令空间
         this.$router.push('/login')
       }
+    },
+    // 全屏处理
+    handleFullScreen() {
+      const element = document.documentElement
+      if (this.fullscreen) {
+        // 判断浏览器兼容性
+        if (document.exitFullscreen) {
+          document.exitFullscreen()
+        } else if (document.webkitCancelFullScreen) {
+          document.webkitCancelFullScreen()
+        } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen()
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen()
+        }
+      } else {
+        if (element.requestFullscreen) {
+          element.requestFullscreen()
+        } else if (element.webkitRequestFullScreen) {
+          element.webkitRequestFullScreen()
+        } else if (element.mozRequestFullScreen) {
+          element.mozRequestFullScreen()
+        } else if (element.msRequestFullscreen) {
+          // IE11
+          element.msRequestFullscreen()
+        }
+      }
+      this.fullscreen = !this.fullscreen
+    },
+    // 消息提示
+    messageTips() {
+      // TODO 消息提示
     }
   }
 }
@@ -104,8 +136,12 @@ export default {
   .right {
     display: flex;
     align-items: center;
-    .item {
-      margin :15px;
+    .btn-fullscreen {
+      width: 30px;
+      text-align: center;
+    }
+    .btn-message-tip {
+      margin: 0 10px 0 10px;
     }
     .fullscreen-icon {
       font-size: 22px;

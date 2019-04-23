@@ -1,14 +1,14 @@
 <template>
   <div class="wrapper">
-    <v-header></v-header>
-    <!--<v-sidebar></v-sidebar>-->
+    <v-header />
+    <v-sidebar />
     <div class="content-box" :class="{'content-collapse':collapse}">
       <!--<v-tags></v-tags>-->
       <div class="content">
         <transition name="move" mode="out-in">
           <!--<keep-alive :include="tagsList">-->
           <router-view />
-          <!--</keep-alive>-->
+        <!--</keep-alive>-->
         </transition>
       </div>
     </div>
@@ -17,10 +17,13 @@
 
 <script>
 import Header from '../components/Header'
+import SideBar from '../components/SideBar'
+
 export default {
   name: 'Dashboard',
   components: {
-    'vHeader': Header
+    'vHeader': Header,
+    'vSidebar': SideBar
   },
   data() {
     return {
