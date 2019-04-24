@@ -11,7 +11,7 @@
     <div class="right">
       <div class="btn-fullscreen" @click="handleFullScreen">
         <el-tooltip effect="dark" :content="fullscreen?`取消全屏`:`全屏`" placement="bottom">
-          <svg-icon icon-class="box" class="fullscreen-icon"/>
+          <svg-icon icon-class="box" class="fullscreen-icon" />
         </el-tooltip>
       </div>
       <div class="btn-message-tip" @click="messageTips">
@@ -69,7 +69,9 @@ export default {
   methods: {
     // 侧边栏折叠
     collapseChage() {
-      // TODO 使用vuex进行保存状态
+      let collapse = this.$store.getters.collapse
+      collapse = !collapse
+      this.$store.dispatch('home/collapseChage', collapse)
     },
     // 下拉菜单的选择命令
     async handleCommand(command) {

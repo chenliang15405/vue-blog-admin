@@ -25,12 +25,13 @@ export default {
     'vHeader': Header,
     'vSidebar': SideBar
   },
-  data() {
-    return {
-      collapse: false
+  computed: {
+    collapse() {
+      const collapse = this.$store.getters.collapse
+      console.log('vuex ' + collapse)
+      return collapse
     }
   }
-
 }
 </script>
 

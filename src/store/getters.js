@@ -4,6 +4,8 @@
 const getters = {
   username: state => state.login.username,
   password: state => state.login.password,
-  role: state => state.login.role
+  role: state => state.login.role,
+  collapse: state => state.home.collapse
 }
+
 export default getters

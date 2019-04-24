@@ -7,7 +7,9 @@
       active-text-color="#ffd04b"
       unique-opened
       router
+      :collapse="collapse"
       class="el-menu"
+      :collapse-transition="false"
     >
       <template v-for="item in items">
         <template v-if="item.subs">
@@ -138,6 +140,13 @@ export default {
         }
       ]
     }
+  },
+  computed: {
+    collapse() {
+      // const collapse = this.$store.state.home.collapse
+      const collapse = this.$store.getters.collapse
+      return collapse
+    }
   }
 }
 </script>
@@ -150,9 +159,9 @@ export default {
     top: 70px;
     bottom: 0;
     overflow: scroll;
+    background-color: #f0f0f0;
   }
   .el-menu {
-    width: 230px;
     height:100%;
   }
 </style>
