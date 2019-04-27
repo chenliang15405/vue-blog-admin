@@ -27,7 +27,7 @@ export default {
   name: 'Tags',
   data() {
     return {
-      tagsList: [{ title: '系统首页', path: '/', name: 'home' }, { title: '系统首页', path: '/', name: 'home' }]
+      tagsList: []
     }
   },
   computed: {
@@ -37,13 +37,14 @@ export default {
   },
   watch: {
     // 监听路由是否改变，将点击的路由设置到tagsList中
-    $router(newValue, oldValue) {
+    $route(newValue, oldValue) {
       this.setTags(newValue)
     }
   },
   created() {
     // 将当前点击的标签到tagslist中
-    this.setTags(this.$router)
+    this.setTags(this.$route)
+    // TODO this.$ruter 标示全局的vue-router对象 用来跳转路由， this.$route 标示跳转的路由对象
   },
   methods: {
     setTags(route) {
@@ -52,11 +53,9 @@ export default {
         return item.path === route.fullPath
       })
       if (!isExist) {
-        // 判断，如果大于8则去除第一个
         if (this.tagsList.length >= 8) {
           this.tagsList.shift()
         }
-        // 保存当前tag
         this.tagsList.push({
           title: route.meta.title,
           path: route.fullPath,
@@ -65,17 +64,17 @@ export default {
       }
     },
     isActive(path) {
-      return path === this.$router.fullPath
+      return path === this.$route.fullPath
     },
     closeAllTags() {
-      const currTag = this.tagsList.filter(item => {
-        return this.$router.fullPath === item.path
-      })
-      this.tagsList = currTag
-    },
-    closeOthersTags() {
       this.tagsList.length = 0
       this.$router.push('/')
+    },
+    closeOthersTags() {
+      const currTag = this.tagsList.filter(item => {
+        return this.$route.fullPath === item.path
+      })
+      this.tagsList = currTag
     },
     handleCommand(command) {
       command === 'all' ? this.closeAllTags() : this.closeOthersTags()
@@ -92,7 +91,7 @@ export default {
     justify-content: space-between;
     align-items: center;
     background: #fff;
-
+    box-shadow: 0 5px 10px #ddd;
     ul {
       display: flex;
       justify-content: flex-start;
@@ -102,7 +101,7 @@ export default {
 
       .tags-li {
         font-size: 12px;
-        color: #fff;
+        color: #666;
         border: 1px solid #e9eaec;
         background: #fff;
         line-height: 20px;
@@ -111,6 +110,18 @@ export default {
         -moz-border-radius: 3px;
         border-radius: 3px;
         margin: 0 5px 0 3px;
+        -webkit-transition: all 0.3s ease-in;
+        -moz-transition: all 0.3s ease-in;
+        -ms-transition: all 0.3s ease-in;
+        -o-transition: all 0.3s ease-in;
+        transition: all 0.3s ease-in;
+      }
+
+      .tags-li.active {
+        color: #fff;
+      }
+      .tags-li.active .tags-li-title {
+        color: #fff;
       }
 
       .tags-li-title {
@@ -128,6 +139,7 @@ export default {
       font-size: 12px;
       display: flex;
       width: 100px;
+      z-index: 2;
     }
 
   }

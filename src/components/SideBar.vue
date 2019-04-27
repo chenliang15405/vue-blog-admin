@@ -64,18 +64,18 @@ export default {
         },
         {
           icon: 'el-icon-menu',
-          index: 'table',
-          title: '基础表格'
+          index: 'user',
+          title: '用户管理'
         },
         {
           icon: 'el-icon-setting',
-          index: 'tabs',
-          title: 'tab选项卡'
+          index: 'label',
+          title: '标签管理'
         },
         {
           icon: 'el-icon-edit',
           index: '3',
-          title: '表单相关',
+          title: '分类管理',
           subs: [
             {
               icon: 'el-icon-document',
@@ -106,7 +106,7 @@ export default {
         {
           icon: 'el-icon-sort',
           index: 'charts',
-          title: 'schart图表'
+          title: '数据管理'
         },
         {
           icon: 'el-icon-rank',
@@ -126,11 +126,11 @@ export default {
         {
           icon: 'el-icon-warning',
           index: '7',
-          title: '错误处理',
+          title: '网站管理',
           subs: [
             {
               index: 'permission',
-              title: '权限测试'
+              title: '资源管理'
             },
             {
               index: '404',
