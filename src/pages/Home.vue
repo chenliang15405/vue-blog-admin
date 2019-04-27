@@ -3,7 +3,7 @@
     <v-header />
     <v-sidebar />
     <div class="content-box" :class="{'content-collapse':collapse}">
-      <!--<v-tags></v-tags>-->
+      <v-tags></v-tags>
       <div class="content">
         <transition name="move" mode="out-in">
           <!--<keep-alive :include="tagsList">-->
@@ -18,12 +18,14 @@
 <script>
 import Header from '../components/Header'
 import SideBar from '../components/SideBar'
+import Tags from '../components/Tags'
 
 export default {
   name: 'Dashboard',
   components: {
     'vHeader': Header,
-    'vSidebar': SideBar
+    'vSidebar': SideBar,
+    'vTags': Tags
   },
   computed: {
     collapse() {

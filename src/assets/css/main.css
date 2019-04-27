@@ -20,6 +20,10 @@ a {
     text-decoration: none
 }
 
+ul li {
+    list-style: none;
+}
+
 
 .content-box {
     position: absolute;
@@ -28,8 +32,8 @@ a {
     top: 70px;
     bottom: 0;
     padding-bottom: 30px;
-    -webkit-transition: left .3s ease-in-out;
-    transition: left .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    transition: all .3s ease-in-out;
     background: #f0f0f0;
 }
 

@@ -161,6 +161,11 @@ export default {
     overflow: scroll;
     background-color: #f0f0f0;
   }
+  /*去除滚动条占位*/
+  .side-bar-container::-webkit-scrollbar{
+    width: 0;
+    height:0;
+  }
   .el-menu {
     height:100%;
   }
