@@ -36,7 +36,7 @@
         </el-row>
       </el-col>
     </el-row>
-    <el-row>
+    <el-row :gutter="20">
       <el-col :span="8">
         <todo-list></todo-list>
       </el-col>
@@ -51,7 +51,7 @@
 import PanelGroup from '../components/PanelGroup'
 import LineChart from '../components/charts/LineChart'
 import ReadChart from '../components/charts/ReadChart'
-import TodoList from '../components/TodoList'
+import TodoList from '../components/todo/TodoList'
 
 const lineChartData = {
   newVisitis: {
