@@ -1,0 +1,191 @@
+/*todo list style*/
+.todolist {
+  background: #fff;
+  box-sizing: border-box;
+  .el-card__body {
+    padding: 5px;
+  }
+  .header {
+    background: #fff;
+    width: 100%;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    margin: 10px 0px 0px 10px;
+    i {
+      font-size: 20px;
+      padding-bottom: 10px;
+    }
+    input {
+      border: none;
+      background: rgba(0, 0, 0, 0.003);
+      box-shadow: inset 0 -2px 1px rgba(0, 0, 0, 0.03);
+      font-size: 18px;
+      line-height: 1.4em;
+      box-sizing: border-box;
+      font-weight: 100;
+      outline:none;
+      margin-left: 10px;
+      padding-bottom: 10px;
+      width: 100%;
+    }
+  }
+  .list-view {
+    width: 100%;
+    background: #fff;
+    margin: 5px 5px 0px 0px;
+    max-height: 380px;
+    overflow: auto;
+    .el-checkbox {
+      margin-right: 10px !important;
+    }
+  }
+
+// todo modules
+  .todo-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .todo-list li {
+    font-size: 20px;
+    border-bottom: 1px solid #ededed;
+    position: relative;
+  }
+  .todo-list li:last-child {
+    border-bottom: none;
+  }
+  // 将checkbox 隐藏
+  .todo-list li .toggle {
+    opacity: 0;
+  }
+  .todo-list li .toggle {
+    text-align: center;
+    width: 40px;
+    /* auto, since non-WebKit browsers doesn't support input styling */
+    height: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto 0;
+    border: none;
+    /* Mobile Safari */
+    -webkit-appearance: button;
+    appearance: button;
+  }
+  // 选项圆圈
+  .todo-list li .toggle+label {
+    /*
+    Firefox requires `#` to be escaped - https://bugzilla.mozilla.org/show_bug.cgi?id=922433
+    IE and Edge requires *everything* to be escaped to render, so we do that instead of just the `#` - https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/7157459/
+  */
+    background-image: url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%23ededed%22%20stroke-width%3D%223%22/%3E%3C/svg%3E');
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: 36px;
+  }
+  .todo-list li .toggle:checked+label {
+    background-size: 36px;
+    background-image: url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%23bddad5%22%20stroke-width%3D%223%22/%3E%3Cpath%20fill%3D%22%235dc2af%22%20d%3D%22M72%2025L42%2071%2027%2056l-4%204%2020%2020%2034-52z%22/%3E%3C/svg%3E');
+  }
+  .todo-list li label {
+    word-break: break-all;
+    padding: 10px 10px 10px 50px;
+    line-height: 40px;
+    font-size: 14px;
+  }
+  // 完成的样式
+  .todo-list li.completed label {
+    color: #d9d9d9;
+    text-decoration: line-through;
+  }
+
+  // 删除样式
+  .todo-list li .destroy {
+    display: none;
+    //float: right;
+    position: absolute;
+    top: 0;
+    right: 5px;
+    bottom: 0;
+    width: 40px;
+    height: 40px;
+    margin: auto 0;
+    border: none;
+    background-color: transparent;
+    outline: none;
+    font-size: 30px;
+    color: #cc2500;
+    transition: color 0.2s ease-out;
+    cursor: pointer;
+  }
+  .todo-list li .destroy:hover {
+    color: red;
+  }
+  .todo-list li .destroy:after {
+    content: '×';
+  }
+  .todo-list li:hover .destroy {
+    display: block;
+  }
+  .todo-list li:hover {
+    .destroy {
+      display: block;
+    }
+  }
+  // edit
+  .todo-list li .edit {
+    display: none;
+  }
+  .todo-list li.editing:last-child {
+    margin-bottom: -1px;
+  }
+  .todo-list li.editing {
+    border-bottom: none;
+    padding: 0;
+  }
+  .todo-list li.editing .edit {
+    display: block;
+    width: 500px;
+    padding: 10px 16px;
+    margin: 0 0 0 43px;
+    position: absolute;
+    outline: none;
+    font-size: 16px;
+  }
+  .todo-list li.editing .view {
+    display: none;
+  }
+
+//  footer
+  .footer {
+    display: flex;
+    border-top: 1px solid #ededed;
+    color: #777;
+    padding: 10px;
+    text-align: center;
+    font-size: 12px;
+    justify-content: space-between;
+    .filters {
+      margin-right: 30px;
+    }
+    .filters li {
+      display: inline-block;
+    }
+
+    .filters li a {
+      color: inherit;
+      font-size: 12px;
+      text-decoration: none;
+      border: 1px solid transparent;
+      border-radius: 3px;
+      padding: 3px 7px;
+    }
+    .filters li a:hover {
+      border-color: rgba(0, 91, 255, 0.64);
+    }
+    .filters li a.selected {
+      border-color: rgba(0, 91, 255, 0.64);
+    }
+  }
+}

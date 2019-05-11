@@ -1,16 +1,16 @@
 <template>
-  <el-card class="todolist" :body-style="padding">
+  <el-card class="todolist">
     <header class="header">
-      <i class="el-icon-edit" />
+      <span @click="toggleAll({ done: !allChecked })">
+        <i class="el-icon-edit" />
+      </span>
       <input v-model="todoContent" type="text" autocomplete="off" placeholder="Todo List" @keyup.enter="addTodo">
     </header>
     <section v-show="todoList.length" class="list-view">
       <template>
-        <input id="toggle-all" :checked="allChecked" class="toggle-all" type="checkbox" @change="toggleAll({ done: !allChecked })">
-        <label for="toggle-all" />
         <ul class="todo-list">
           <todo
-            v-for="(todo, index) in todoList"
+            v-for="(todo, index) in filterCatagories"
             :key="index"
             :todo="todo"
             @toggleTodo="toggleTodo"
@@ -20,6 +20,17 @@
         </ul>
       </template>
     </section>
+    <footer v-show="todoList.length" class="footer">
+      <span class="item">
+        <strong>{{ remaining }}</strong>
+        {{ remaining | pluralize('item')}}  left
+      </span>
+      <ul class="filters">
+        <li v-for="(value,key) in catagories" :key="key">
+          <a :class="{ selected: visibility === key }" @click.prevent="visibility = key" >{{ key }}</a>
+        </li>
+      </ul>
+    </footer>
   </el-card>
 </template>
 
@@ -36,17 +47,39 @@ const defalutList = [
   { text: 'axios', done: true },
   { text: 'webpack', done: true }
 ]
+const catagories = {
+  all: todos => todos,
+  active: todos => todos.filter(todo => !todo.done),
+  completed: todos => todos.filter(todo => todo.done)
+}
 export default {
   name: 'TodoList',
   components: {
     Todo
   },
+  filters: {
+    // vue自带的过滤器，capitalize： 首字母大写   pluralize ：如果只有一个参数，复数形式只是简单地在末尾添加一个 “s”，如果有多个参数，参数被当作一个字符串数组
+    pluralize: (n, w) => n === 1 ? w : w + 's'
+
+  },
+  computed: {
+    remaining() {
+      // done为false的数量
+      return this.todoList.filter(todo => !todo.done).length
+    },
+    filterCatagories() {
+      // 处理分类的显示
+      return this.catagories[this.visibility](this.todoList)
+    }
+  },
   data() {
     return {
       todoContent: '',
       todoList: defalutList,
-      padding: { padding: '15px' },
-      checked: false
+      checked: false,
+      allChecked: true,
+      catagories: catagories,
+      visibility: 'all'
     }
   },
   methods: {
@@ -55,76 +88,37 @@ export default {
 
     },
     addTodo(e) {
-      console.log(e)
-      // 可以直接使用v-model
+      this.todoList.push({ text: this.todoContent, done: false })
+      this.todoContent = ''
+      this.setTodoListData()
     },
     toggleAll({ done }) {
-
+      this.allChecked = done
+      this.todoList.forEach(todo => {
+        todo.done = done
+      })
+      this.setTodoListData()
     },
-    editTodo() {
-
+    editTodo({ todo, value }) {
+      todo.text = value
+      this.setTodoListData()
     },
     toggleTodo(todo) {
       todo.done = !todo.done
       this.setTodoListData()
     },
     deleteTodo(todo) {
-      this.todoList.splice(this.todoList.indexOf(todo), 1)
+      var textArr = this.todoList.map(item => {
+        return item.text
+      })
+      this.todoList.splice(textArr.indexOf(todo.text), 1)
       this.setTodoListData()
     }
   }
 }
 </script>
 
-<style scoped lang="scss">
-  .todolist {
-    background: #fff;
-    box-sizing: border-box;
-    .header {
-      background: #fff;
-      width: 100%;
-      height: 35px;
-      display: flex;
-      align-items: center;
-      i {
-        font-size: 20px;
-        padding-bottom: 10px;
-      }
-      input {
-        border: none;
-        background: rgba(0, 0, 0, 0.003);
-        box-shadow: inset 0 -2px 1px rgba(0, 0, 0, 0.03);
-        font-size: 18px;
-        line-height: 1.4em;
-        box-sizing: border-box;
-        font-weight: 100;
-        outline:none;
-        margin-left: 10px;
-        padding-bottom: 10px;
-        width: 100%;
-      }
-    }
-    .list-view {
-      width: 100%;
-      background: #fff;
-      margin: 10px 10px 10px 10px;
-      .el-checkbox {
-        margin-right: 10px !important;
-      }
-      .todo-item {
-        overflow: hidden;
-        display: flex;
-        align-items: center;
-        border-bottom: 1px solid #ccc;
-        padding: 5px;
-        margin-bottom: 10px;
-        .todo-title {
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-        }
-      }
-    }
-  }
+<style lang="scss">
+  @import "./index.scss";
 
 </style>
