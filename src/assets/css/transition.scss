@@ -1,0 +1,15 @@
+/*main container transition   name="move"*/
+.move-leave-active,
+.move-enter-active {
+  transition: all .5s;
+}
+
+.move-enter {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+.move-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}

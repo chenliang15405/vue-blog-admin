@@ -6,7 +6,7 @@
       <v-tags></v-tags>
       <div class="content">
         <transition name="move" mode="out-in">
-          <!--<keep-alive :include="tagsList">-->
+          <!--<keep-alive :include="tagsList"> 可以保持浏览记录，在react-blog中也可以使用-->
           <router-view />
         <!--</keep-alive>-->
         </transition>

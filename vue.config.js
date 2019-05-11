@@ -18,9 +18,17 @@ module.exports = {
   productionSourceMap: false,
   devServer: {
     open: true,
-    host: '0.0.0.0',
-    port: 3000
-    // proxy: {}
+    // host: '0.0.0.0',
+    port: 3000,
+    proxy: {
+      '/dev-api': {
+        target: ' https://www.easy-mock.com/mock/5c8c8e03800fbb7305fd80c1/example_copy',
+        changeOrigin: true,
+        pathRewrite: {
+          '/dev-api': ''
+        }
+      }
+    }
   }
   // configureWebpack: {
   //   // provide the app's title in webpack's name field, so that
@@ -33,18 +41,18 @@ module.exports = {
   //   }
   // }
   // devServer: {
-  //     proxy: {
-  //         '/api':{
-  //             target:'http://jsonplaceholder.typicode.com',
-  //             changeOrigin:true,
-  //             pathRewrite:{
-  //                 '/api':''
-  //             }
-  //         },
-  //         '/ms':{
-  //             target: 'https://www.easy-mock.com/mock/592501a391470c0ac1fab128',
-  //             changeOrigin: true
-  //         }
+  //   proxy: {
+  //     '/api': {
+  //       target: 'http://jsonplaceholder.typicode.com',
+  //       changeOrigin: true,
+  //       pathRewrite: {
+  //         '/api': ''
+  //       }
+  //     },
+  //     '/ms': {
+  //       target: 'https://www.easy-mock.com/mock/592501a391470c0ac1fab128',
+  //       changeOrigin: true
   //     }
+  //   }
   // }
 }

@@ -73,6 +73,16 @@ export default {
           title: '标签管理'
         },
         {
+          icon: 'el-icon-setting',
+          index: 'label2',
+          title: '评论管理'
+        },
+        {
+          icon: 'el-icon-setting',
+          index: 'label3',
+          title: '系统设置'
+        },
+        {
           icon: 'el-icon-edit',
           index: '3',
           title: '分类管理',

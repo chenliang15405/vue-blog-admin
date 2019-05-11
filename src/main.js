@@ -14,6 +14,7 @@ import store from './store'
 // import './components/common/directives'
 
 import './assets/font/iconfont.css'
+import '@/assets/css/transition.scss' // global transition css
 
 import router from './router'
 
