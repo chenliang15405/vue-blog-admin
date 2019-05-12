@@ -64,7 +64,6 @@
         <el-table-column
           prop="address"
           label="地址"
-          fit="true"
           align="center"
         />
         <el-table-column
@@ -115,8 +114,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+        <el-button @click="dialogFormCancel">取 消</el-button>
+        <el-button type="primary" @click="dialogFOrmSubmit">确 定</el-button>
       </div>
     </el-dialog>
 
@@ -149,6 +148,7 @@ export default {
         status: ''
       },
       userForm: {
+        id: '',
         username: '',
         role: '',
         nickname: '',
@@ -173,14 +173,14 @@ export default {
     },
     getUserData(page, pageSize) {
       getUserList(page, pageSize).then(res => {
-        console.log(res)
         this.listLoading = false
         this.userList = res.body
         this.total = res.total
       })
     },
     handleEdit(index, row) {
-
+      this.userForm = row
+      this.dialogFormVisible = true
     },
     handleDelete(index, row) {
 
@@ -190,6 +190,21 @@ export default {
     },
     getList(val) {
       this.getUserData(val.currentPage, val.pageSize)
+    },
+    dialogFOrmSubmit() {
+      // TODO sumit form
+      this.$message({
+        showClose: true,
+        message: '恭喜你，这是一条成功消息',
+        type: 'success',
+        center: true
+      })
+      this.dialogFormVisible = false
+      this.userForm = {}
+    },
+    dialogFormCancel() {
+      this.dialogFormVisible = false
+      this.userForm = {}
     }
   }
 }

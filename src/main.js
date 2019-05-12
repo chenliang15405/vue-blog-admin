@@ -18,8 +18,15 @@ import '@/assets/css/transition.scss' // global transition css
 
 import router from './router'
 
+import * as customFilter from './utils/DateFormat'
+
 Vue.use(ElementUI, {
   size: Cookies.get('size') || 'medium'
+})
+
+// 导出的是对象，可以直接通过 key 和 value 来获得过滤器的名和过滤器的方法
+Object.keys(customFilter).forEach(key => {
+  Vue.filter(key, customFilter[key])
 })
 
 Vue.prototype.$axios = axios
