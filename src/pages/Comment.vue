@@ -5,12 +5,12 @@
         <el-button type="primary" size="small" icon="delete" class="handle-del mr10" @click="delAll">批量删除</el-button>
         <el-select v-model="select_state" placeholder="状态" class="handle-select mr10">
           <!--for each-->
-          <el-option key="1" label="待审核" value="待审核"></el-option>
-          <el-option key="2" label="通过" value="通过"></el-option>
-          <el-option key="3" label="未通过" value="未通过"></el-option>
+          <el-option key="1" label="待审核" value="待审核" />
+          <el-option key="2" label="通过" value="通过" />
+          <el-option key="3" label="未通过" value="未通过" />
         </el-select>
-        <el-input v-model="select_article" placeholder="Search 文章名称" class="handle-input mr10"></el-input>
-        <el-input v-model="select_commenter" placeholder="Search 评论人" class="handle-input mr10"></el-input>
+        <el-input v-model="select_article" placeholder="Search 文章名称" class="handle-input mr10" />
+        <el-input v-model="select_commenter" placeholder="Search 评论人" class="handle-input mr10" />
         <el-button type="default" size="medium" icon="search" @click="search">搜索</el-button>
       </div>
       <el-table
@@ -25,8 +25,7 @@
           type="selection"
           width="55"
           align="center"
-        >
-        </el-table-column>
+        />
         <el-table-column
           label="序号"
           prop="id"
@@ -49,7 +48,7 @@
           align="center"
         >
           <template slot-scope="scope">
-            <a href="">{{ scope.row.article }}</a>
+            <a onclick="openCommentDetailDialog(scope)">{{ scope.row.article }}</a>
           </template>
         </el-table-column>
         <el-table-column
@@ -71,13 +70,30 @@
           label="操作"
           align="center"
         >
-          <template slot-scope="scope">
+          <template>
             <el-button size="mini" type="text" class="pass" @click="handlePass(scope.$index, scope.row)">通过</el-button>
-            <el-button size="mini" type="text" class="notpass" @click="handleNotPass(scope.$index, scope.row)">不通过</el-button>
-            <el-button size="mini" type="text" class="delete" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+            <el-button size="mini" type="text" class="notpass" @click="handleNotPass(scope.$index, scope.row)">不通过
+            </el-button>
+            <el-button size="mini" type="text" class="delete" @click="handleDelete(scope.$index, scope.row)">删除
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
+
+      <!--dialog 可以显示评论的列表 并且加上 楼层-->
+      <el-dialog
+        title="提示"
+        :visible.sync="commentDeatailVisible"
+        width="30%"
+        center
+      >
+        <span>需要注意的是内容是默认不居中的</span>
+        <span slot="footer" class="dialog-footer">
+          <el-button size="mini" @click="centerDialogVisible = false">取 消</el-button>
+          <el-button size="mini" type="primary" @click="centerDialogVisible = false">确 定</el-button>
+        </span>
+      </el-dialog>
+
     </div>
   </div>
 </template>
@@ -91,7 +107,7 @@ export default {
     statusFilter(state) {
       const statusMap = {
         'pass': 'success',
-        'nopass': 'danger',
+        'notpass': 'danger',
         'judge': 'info'
       }
       return statusMap[state]
@@ -107,7 +123,8 @@ export default {
       },
       select_state: '',
       select_article: '',
-      select_commenter: ''
+      select_commenter: '',
+      commentDeatailVisible: false
     }
   },
   created() {
@@ -135,6 +152,10 @@ export default {
     handleSelectionChange() {
 
     },
+    openCommentDetailDialog({ row }) {
+      // TODO 查询到这个article的所有评论
+      this.commentDeatailVisible = true
+    },
     search() {
 
     },
@@ -161,6 +182,15 @@ export default {
         margin-right: 20px;
       }
 
+      .pass {
+        color: #00e000;
+      }
+      .notpass {
+        color: #ffe654;
+      }
+      .delete {
+        color: #ff0000;
+      }
     }
   }
 

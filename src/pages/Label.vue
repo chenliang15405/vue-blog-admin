@@ -33,6 +33,7 @@
           prop="labelName"
           label="标签名称"
           sortable
+          align="center"
         >
           <template slot-scope="{ row }">
             <el-tag :type="row | labelFilter" size="small">{{ row.labelName }}</el-tag>

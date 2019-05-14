@@ -79,8 +79,8 @@ export default {
         },
         {
           icon: 'el-icon-setting',
-          index: 'label3',
-          title: '系统设置'// password nickname 个性签名
+          index: 'category',
+          title: '分类管理'
         },
         {
           icon: 'el-icon-edit',
@@ -132,6 +132,11 @@ export default {
               title: '拖拽弹框'
             }
           ]
+        },
+        {
+          icon: 'el-icon-setting',
+          index: 'label3',
+          title: '系统设置'// password nickname 个性签名
         },
         {
           icon: 'el-icon-warning',

@@ -43,6 +43,11 @@ export default new Router({
           path: '/comment',
           component: resolve => require(['./pages/Comment.vue'], resolve),
           meta: { title: '评论管理' }
+        },
+        {
+          path: '/category',
+          component: resolve => require(['./pages/Category.vue'], resolve),
+          meta: { title: '分类管理' }
         }
       ]
     }
