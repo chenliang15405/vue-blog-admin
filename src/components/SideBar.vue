@@ -74,13 +74,13 @@ export default {
         },
         {
           icon: 'el-icon-setting',
-          index: 'label2',
+          index: 'comment',
           title: '评论管理'
         },
         {
           icon: 'el-icon-setting',
           index: 'label3',
-          title: '系统设置'
+          title: '系统设置'// password nickname 个性签名
         },
         {
           icon: 'el-icon-edit',
@@ -116,7 +116,7 @@ export default {
         {
           icon: 'el-icon-sort',
           index: 'charts',
-          title: '数据管理'
+          title: 'Link'
         },
         {
           icon: 'el-icon-rank',

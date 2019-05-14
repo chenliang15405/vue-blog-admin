@@ -38,6 +38,11 @@ export default new Router({
           path: '/label',
           component: resolve => require(['./pages/Label.vue'], resolve),
           meta: { title: '标签管理' }
+        },
+        {
+          path: '/comment',
+          component: resolve => require(['./pages/Comment.vue'], resolve),
+          meta: { title: '评论管理' }
         }
       ]
     }

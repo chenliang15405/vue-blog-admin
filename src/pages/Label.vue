@@ -16,7 +16,7 @@
         <el-input v-model="select_word" placeholder="Search 标签名称" class="handle-input mr10"></el-input>
         <el-button type="primary" size="medium" icon="search" @click="search">搜索</el-button>
       </div>
-      <el-table :data="labelList" border fit highlight-current-row style="width: 100%" ref="multipleTable" @selection-change="handleSelectionChange">
+      <el-table :data="labelList" v-loading="listLoading" border fit highlight-current-row style="width: 100%" ref="multipleTable" @selection-change="handleSelectionChange">
         <el-table-column
           type="selection"
           width="55"
@@ -103,8 +103,6 @@ export default {
         pageSize: 10
       },
       sortable: null,
-      oldList: [],
-      newList: [],
       select_type: null,
       select_word: ''
     }
@@ -115,6 +113,7 @@ export default {
   methods: {
     async getLabelList(page, pageSize) {
       await getLabelList(page, pageSize).then(res => {
+        this.listLoading = false
         this.labelList = res.body
       })
     },
