@@ -67,7 +67,6 @@
           align="center"
         />
         <el-table-column
-          prop="status"
           label="状态"
           align="center"
         >
@@ -189,7 +188,7 @@ export default {
 
     },
     getList(val) {
-      this.getUserData(val.currentPage, val.pageSize)
+      this.getUserData(val.page, val.pageSize)
     },
     dialogFOrmSubmit() {
       // TODO sumit form

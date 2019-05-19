@@ -135,14 +135,13 @@ export default {
         const data = await getCategoryList(page, pageSize)
         this.listLoading = false
         this.categoryList = data.body
-        this.pageQuery.total = this.categoryList.length
+        this.pageQuery.total = data.total
       } catch (e) {
         console.log(e)
       }
     },
     getList({ page, pageSize }) {
-      console.log(page)
-      console.log(pageSize)
+      this.getCategoryData(page, pageSize)
     },
     resetDateFilter() {
       this.$refs.filterTable.clearFilter('createdate')

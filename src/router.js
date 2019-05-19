@@ -30,11 +30,6 @@ export default new Router({
           meta: { title: '用户管理' }
         },
         {
-          path: '/article',
-          component: resolve => require(['./pages/User.vue'], resolve),
-          meta: { title: '文章管理' }
-        },
-        {
           path: '/label',
           component: resolve => require(['./pages/Label.vue'], resolve),
           meta: { title: '标签管理' }
@@ -48,6 +43,21 @@ export default new Router({
           path: '/category',
           component: resolve => require(['./pages/Category.vue'], resolve),
           meta: { title: '分类管理' }
+        },
+        {
+          path: '/article',
+          component: resolve => require(['./pages/Article.vue'], resolve),
+          meta: { title: '文章管理' }
+        },
+        {
+          path: '/editor',
+          component: resolve => require(['./pages/creative/TxtEditor.vue'], resolve),
+          meta: { title: '富文本编辑器' }
+        },
+        {
+          path: '/markdown',
+          component: resolve => require(['./pages/creative/MarkDownEditor.vue'], resolve),
+          meta: { title: 'markdown编辑器' }
         }
       ]
     }

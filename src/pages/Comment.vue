@@ -57,7 +57,6 @@
           align="center"
         />
         <el-table-column
-          prop="state"
           label="状态"
           align="center"
         >

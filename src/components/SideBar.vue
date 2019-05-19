@@ -85,17 +85,17 @@ export default {
         {
           icon: 'el-icon-edit',
           index: '3',
-          title: '分类管理',
+          title: '文章管理',
           subs: [
             {
               icon: 'el-icon-document',
-              index: 'form',
-              title: '基本表单'
+              index: 'article',
+              title: '文章列表'
             },
             {
               icon: 'el-icon-edit',
               index: '3-2',
-              title: '三级菜单',
+              title: '文章创作',
               subs: [
                 {
                   index: 'editor',
