@@ -18,7 +18,7 @@ import '@/assets/css/transition.scss' // global transition css
 
 import router from './router'
 
-import * as customFilter from './utils/DateFormat'
+import * as customFilter from './utils/commonFilter'
 
 Vue.use(ElementUI, {
   size: Cookies.get('size') || 'medium'

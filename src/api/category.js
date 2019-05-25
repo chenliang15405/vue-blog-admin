@@ -11,4 +11,11 @@ const getCategoryList = (page, pageSize) => {
   })
 }
 
-export { getCategoryList }
+const getAllCategoryList = () => {
+  return request({
+    url: '/category/allList',
+    method: 'get'
+  })
+}
+
+export { getCategoryList, getAllCategoryList }

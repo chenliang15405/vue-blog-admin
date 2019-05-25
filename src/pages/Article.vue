@@ -23,6 +23,7 @@
             <el-select v-model="searchForm.orginal_status" placeholder="原创状态">
               <el-option label="原创" value="0" />
               <el-option label="转载" value="1" />
+              <el-option label="翻译" value="2" />
             </el-select>
           </el-form-item>
           <el-form-item>
@@ -148,6 +149,7 @@
 <script>
 import Pagination from '@/components/Pagination'
 import { getArticleList } from '@/api/article'
+
 export default {
   name: 'Article',
   components: {
@@ -157,17 +159,19 @@ export default {
     originnalStatusFilter(original_status) {
       const statusMap = {
         '0': 'success',
-        '1': 'warning'
+        '1': 'warning',
+        '2': 'info'
       }
       return statusMap[original_status]
     },
-    originalStatusWordFilter(original_status) {
-      const statusMap = {
-        '0': '原创',
-        '1': '转载'
-      }
-      return statusMap[original_status]
-    },
+    // originalStatusWordFilter(original_status) {
+    //   const statusMap = {
+    //     '0': '原创',
+    //     '1': '转载',
+    //     '2': '翻译'
+    //   }
+    //   return statusMap[original_status]
+    // },
     stateFilter(stauts) {
       const statusMap = {
         '0': 'success', // 已发布
