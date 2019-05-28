@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import { rgbaColor } from '../utils/color'
 export default {
   name: 'ArticleTag',
   props: {
@@ -76,6 +77,9 @@ export default {
     },
     saveTag(e) {
       if (this.value) {
+        const tag = `{ name: ${this.value}, color: { 'background-color':${rgbaColor(0.6)} } }`
+        console.log('tag', tag)
+
         this.$emit('addTag', this.value)
         this.list.push(this.value)
         this.value = ''

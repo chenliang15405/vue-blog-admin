@@ -84,7 +84,7 @@
             <el-col :span="24">
               <el-switch
                 v-model="postForm.privacy"
-                style="display: block;"
+                style="display: block;width: 130px;"
                 active-color="#13ce66"
                 inactive-color="#ccc"
                 inactive-text="私密文章："
@@ -97,7 +97,7 @@
               <div class="btn-box">
                 <el-button type="danger" plain class="btn" @click="submitForm">发布博客</el-button>
                 <el-button type="success" plain class="btn" @click="saveDraft">保存草稿</el-button>
-                <el-button type="info" plain class="btn" @click="goBack">返回</el-button>
+                <el-button type="info" plain @click="goBack">返回</el-button>
               </div>
             </el-col>
           </el-row>
@@ -351,6 +351,7 @@ export default {
       }
       .btn-box {
         margin: 60px 0 30px 50%;
+        text-align: center;
         transform: translateX(-50%);
         .btn {
           margin-right: 10px;

@@ -3,7 +3,7 @@
     <v-header />
     <v-sidebar />
     <div class="content-box" :class="{'content-collapse':collapse}">
-      <v-tags></v-tags>
+      <v-tags />
       <div class="content">
         <transition name="move" mode="out-in">
           <!--<keep-alive :include="tagsList"> 可以保持浏览记录，在react-blog中也可以使用-->
@@ -30,7 +30,7 @@ export default {
   computed: {
     collapse() {
       const collapse = this.$store.getters.collapse
-      console.log('vuex ' + collapse)
+      console.log('vuex collapse ', collapse)
       return collapse
     }
   }

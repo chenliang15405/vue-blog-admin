@@ -39,7 +39,7 @@
           <el-row>
             <el-col :span="24">
               <el-form-item prop="content">
-                <rich-text-editor :content="postForm.content" @changeContent="changeContent" />
+                <markdown-editor></markdown-editor>
               </el-form-item>
             </el-col>
           </el-row>
@@ -84,7 +84,7 @@
             <el-col :span="24">
               <el-switch
                 v-model="postForm.privacy"
-                style="display: block;"
+                style="display: block;width: 130px;"
                 active-color="#13ce66"
                 inactive-color="#ccc"
                 inactive-text="私密文章："
@@ -109,8 +109,8 @@
 </template>
 
 <script>
+import MarkdownEditor from '@/components/editor/MarkdownEditor'
 import ImgUpload from '@/components/ImgUpload'
-import RichTextEditor from '@/components/editor/RichTextEditor'
 import ArticleTag from '@/components/ArticleTag'
 import ArticleCategory from '@/components/ArticleCategory'
 import { getAllUser } from '@/api/user'
@@ -121,8 +121,8 @@ const ARTICLE_TYPE = ['0', '1', '2']
 export default {
   name: 'MarkDownEditor',
   components: {
+    MarkdownEditor,
     ImgUpload,
-    RichTextEditor,
     ArticleTag,
     ArticleCategory
   },
@@ -351,6 +351,7 @@ export default {
       .btn-box {
         margin: 60px 0 30px 50%;
         transform: translateX(-50%);
+        text-align: center;
         .btn {
           margin-right: 10px;
         }

@@ -1,5 +1,7 @@
 <template>
-  <div>
+  <div class="dashboard-container">
+    <github-corner class="github-corner" />
+
     <el-row type="flex" :gutter="20">
       <el-col :span="8">
         <el-card shadow="hover" class="mgb20">
@@ -13,6 +15,7 @@
           <div class="user-info-list"><span>上次登录时间：2018-01-01</span></div>
           <div class="user-info-list"><span>上次登录地点：东莞</span></div>
         </el-card>
+
         <el-card shadow="hover" class="mgb20">
           <div slot="header" class="clearfix">
             <span>语言详情</span>
@@ -29,19 +32,22 @@
         </el-card>
       </el-col>
       <el-col :span="16">
-        <panel-group></panel-group>
+
+        <panel-group />
 
         <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
           <line-chart :chart-data="lineChartData" />
         </el-row>
       </el-col>
     </el-row>
+
     <el-row :gutter="20">
       <el-col :span="8">
-        <todo-list></todo-list>
+        <todo-list />
       </el-col>
+
       <el-col :span="16">
-        <read-chart></read-chart>
+        <read-chart />
       </el-col>
     </el-row>
   </div>
@@ -52,6 +58,7 @@ import PanelGroup from '../components/PanelGroup'
 import LineChart from '../components/charts/LineChart'
 import ReadChart from '../components/charts/ReadChart'
 import TodoList from '../components/todo/TodoList'
+import GithubCorner from '../components/GithubCorner'
 
 const lineChartData = {
   newVisitis: {
@@ -66,7 +73,8 @@ export default {
     PanelGroup,
     LineChart,
     ReadChart,
-    TodoList
+    TodoList,
+    GithubCorner
   },
   data() {
     return {
@@ -79,6 +87,16 @@ export default {
 </script>
 
 <style scoped lang="scss">
+  .dashboard-container {
+    margin: 10px 10px 50px 0;
+  }
+  .github-corner {
+    position: absolute;
+    top: 30px;
+    right: 0;
+    border: 0;
+    z-index: 1;
+  }
   .user-info {
     display: flex;
     align-items: center;
