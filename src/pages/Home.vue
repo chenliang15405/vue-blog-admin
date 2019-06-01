@@ -12,6 +12,9 @@
         </transition>
       </div>
     </div>
+    <right-panel v-if="showSettings">
+      <settings />
+    </right-panel>
   </div>
 </template>
 
@@ -19,15 +22,23 @@
 import Header from '../components/Header'
 import SideBar from '../components/SideBar'
 import Tags from '../components/Tags'
+import RightPanel from '../components/settings/RightPanel'
+import Settings from '../components/settings/Settings'
+import { mapState } from 'vuex'
 
 export default {
   name: 'Dashboard',
   components: {
     'vHeader': Header,
     'vSidebar': SideBar,
-    'vTags': Tags
+    'vTags': Tags,
+    RightPanel,
+    Settings
   },
   computed: {
+    ...mapState({
+      showSettings: state => state.settings.showSettings
+    }),
     collapse() {
       const collapse = this.$store.getters.collapse
       console.log('vuex collapse ', collapse)

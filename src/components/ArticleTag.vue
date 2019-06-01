@@ -4,7 +4,7 @@
       <span class="title">文章标签：</span>
 
       <div v-for="(item, i) in list" :key="i" class="tag-list-box">
-        <span class="tag-item">{{ item }}</span>
+        <span class="tag-item" :style="item.color">{{ item.name }}</span>
         <i class="el-icon-close" @click="removeTag(item,'done')" />
       </div>
 
@@ -59,8 +59,12 @@ export default {
       if (this.list.length < 5) {
         this.isShow = true
         if (this.value) {
-          this.list.push(this.value)
-          this.$emit('addTag', this.value)
+          const tag = {
+            name: this.value,
+            color: { 'background-color': rgbaColor(0.8) }
+          }
+          this.list.push(tag)
+          this.$emit('addTag', tag)
           this.value = ''
         }
       }
@@ -68,7 +72,7 @@ export default {
     removeTag(item, done) {
       if (done) {
         this.list = this.list.filter(val => {
-          return val !== item
+          return val.name !== item.name
         })
         this.$emit('removeTag', this.list)
         return
@@ -77,11 +81,13 @@ export default {
     },
     saveTag(e) {
       if (this.value) {
-        const tag = `{ name: ${this.value}, color: { 'background-color':${rgbaColor(0.6)} } }`
-        console.log('tag', tag)
+        const tag = {
+          name: this.value,
+          color: { 'background-color': rgbaColor(0.8) }
+        }
 
-        this.$emit('addTag', this.value)
-        this.list.push(this.value)
+        this.$emit('addTag', tag)
+        this.list.push(tag)
         this.value = ''
       }
     },

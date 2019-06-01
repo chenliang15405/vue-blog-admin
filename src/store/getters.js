@@ -5,7 +5,11 @@ const getters = {
   username: state => state.login.username,
   password: state => state.login.password,
   role: state => state.login.role,
-  collapse: state => state.home.collapse
+  collapse: state => state.home.collapse,
+  theme: state => state.settings.theme,
+  showSettings: state => state.settings.showSettings,
+  tagsView: state => state.settings.tagsView,
+  sidebarLogo: state => state.settings.sidebarLogo
 }
 
 export default getters

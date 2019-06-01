@@ -5,7 +5,7 @@
         <router-link :to="item.path" class="tags-li-title">
           {{ item.title }}
         </router-link>
-        <span class="tags-li-icon"><i class="el-icon-close" /></span>
+        <span class="tags-li-icon" @click="closeTag(item)"><i class="el-icon-close" /></span>
       </li>
     </ul>
     <div class="tags-manage">
@@ -32,7 +32,7 @@ export default {
   },
   computed: {
     showTags() {
-      return this.tagsList || false
+      return this.$store.getters.tagsView || false
     }
   },
   watch: {
@@ -78,6 +78,13 @@ export default {
     },
     handleCommand(command) {
       command === 'all' ? this.closeAllTags() : this.closeOthersTags()
+    },
+    closeTag(val) {
+      console.log(val.title)
+      this.tagsList.splice(this.tagsList.findIndex(item => item.name === val.name), 1)
+      if (this.tagsList.length === 0) {
+        this.$router.push('/')
+      }
     }
   }
 }

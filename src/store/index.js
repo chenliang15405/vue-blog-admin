@@ -5,13 +5,15 @@ import getters from './getters'
 
 import login from './modules/login'
 import home from './modules/home'
+import settings from './modules/settings'
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
   modules: {
     login,
-    home
+    home,
+    settings
   },
   state: {},
   mutations: {},

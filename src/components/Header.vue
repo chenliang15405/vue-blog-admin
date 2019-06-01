@@ -4,8 +4,9 @@
       <div class="collapse-btn" @click="collapseChage">
         <svg-icon icon-class="gongneng1" class="icon" />
       </div>
-      <div class="title">
+      <div class="title word">
         <span>后台管理系统</span>
+        <img v-if="showSideBarLogo" src="../assets/favicon.png" class="logo">
       </div>
     </div>
     <div class="right">
@@ -59,11 +60,18 @@ export default {
     }
   },
   computed: {
+    // 计算属性默认的是get方法 -- get(){} 就可以简化为 username(){}
+    // 如果需要提供set方法，就需要给一个属性 showLogo: { get(){}, set(){} }
     username() {
       const username = this.$store.state.login.username
-      console.log(this.$store.getters.password)
+      // console.log(this.$store.getters.password)
       // const username = localStorage.getItem('login_usernmae')
       return username || '未知'
+    },
+    showSideBarLogo: {
+      get() {
+        return this.$store.getters.sidebarLogo
+      }
     }
   },
   methods: {
@@ -134,6 +142,15 @@ export default {
   .left {
     display: flex;
     align-items: center;
+    .word {
+      display: flex;
+      align-items: center;
+    }
+    .logo {
+      margin-left: 20px;
+      width: 50px;
+      height: 50px;
+    }
   }
   .right {
     display: flex;
