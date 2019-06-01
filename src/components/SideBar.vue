@@ -108,7 +108,7 @@ export default {
               ]
             },
             {
-              index: 'upload',
+              index: 'fileupload',
               title: '文件上传'
             }
           ]
@@ -121,7 +121,7 @@ export default {
         {
           icon: 'el-icon-rank',
           index: '6',
-          title: '拖拽组件',
+          title: 'TODOLIST',
           subs: [
             {
               index: 'drag',
@@ -135,8 +135,8 @@ export default {
         },
         {
           icon: 'el-icon-setting',
-          index: 'label3',
-          title: '系统设置'// password nickname 个性签名
+          index: 'my',
+          title: '个人中心'// password nickname 个性签名
         },
         {
           icon: 'el-icon-warning',

@@ -58,6 +58,16 @@ export default new Router({
           path: '/markdown',
           component: resolve => require(['./pages/creative/MarkDownEditor.vue'], resolve),
           meta: { title: 'markdown编辑器' }
+        },
+        {
+          path: '/my',
+          component: resolve => require(['./pages/My.vue'], resolve),
+          meta: { title: '个人中心' }
+        },
+        {
+          path: '/fileupload',
+          component: resolve => require(['./pages/FileUpload.vue'], resolve),
+          meta: { title: '文件资源' }
         }
       ]
     }

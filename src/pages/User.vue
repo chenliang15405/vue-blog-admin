@@ -38,18 +38,19 @@
           label="ID"
           prop="id"
           align="left"
-          width="80px"
+          width="50px"
         />
         <el-table-column
           prop="username"
           label="姓名"
           align="center"
-          width="100px"
+          width="80px"
         />
         <el-table-column
           prop="role"
           label="角色"
           align="center"
+          width="100px"
         />
         <el-table-column
           prop="email"
@@ -69,6 +70,7 @@
         <el-table-column
           label="状态"
           align="center"
+          width="80px"
         >
           <!--template的slot插槽，可以拿到当前row-->
           <template slot-scope="{ row }">
