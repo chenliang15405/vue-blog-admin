@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import request from '@/request'
 
 const getArticleList = (page, pageSize) => {
   return request({
@@ -19,7 +19,7 @@ const getArticleList = (page, pageSize) => {
 */
 const createArticle = (data) => {
   return request({
-    url: '/article/create',
+    url: '/article/article/',
     method: 'post',
     data
   })

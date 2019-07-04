@@ -22,10 +22,10 @@
       <div class="list-box">
         <el-checkbox-group
           v-model="checkedList"
-          :max="3"
+          :max="1"
           @change="handleChecked"
         >
-          <el-checkbox v-for="item in optionList" :key="item" class="option" :label="item">{{ item }}</el-checkbox>
+          <el-checkbox v-for="item in optionList" :key="item.id" class="option" :label="item.id">{{ item.categoryname }}</el-checkbox>
         </el-checkbox-group>
       </div>
     </div>
@@ -69,9 +69,13 @@ export default {
     async initData() {
       try {
         const data = await getAllCategoryList()
-        const list = data.data.data
+        const list = data.data
         this.optionList = list.map(item => {
-          return item.category_name
+          const obj = {
+            id: item.id,
+            categoryname: item.categoryname
+          }
+          return obj
         })
       } catch (e) {
         console.log(e)

@@ -9,21 +9,21 @@
           </el-form-item>
 
           <el-form-item style="margin-bottom: 40px;" label="摘要" label-width="45px" prop="summary">
-            <el-input v-model="postForm.summary" :rows="1" type="textarea" class="article-summary" autosize placeholder="请输入文章摘要" />
+            <el-input v-model="postForm.summary" :rows="2" type="textarea" class="article-summary" autosize placeholder="请输入文章摘要" />
             <span v-show="contentShortLength" class="word-counter">{{ contentShortLength }}/100 字</span>
           </el-form-item>
 
           <el-row class="row2">
-            <el-col :span="6">
+            <!--<el-col :span="6">
               <el-form-item style="margin-bottom: 40px;" label="作者" prop="author">
                 <el-select v-model="postForm.author" :remote-method="getRemoteUserList" :loading="loading" clearable filterable default-first-option remote placeholder="搜索用户">
                   <el-option v-for="(item,index) in userListOptions" :key="item+index" :label="item" :value="item" />
                 </el-select>
               </el-form-item>
-            </el-col>
+            </el-col>-->
 
             <el-col :span="12">
-              <el-form-item style="margin: 0 0 40px 20px;" label="发布时间" prop="createdate">
+              <el-form-item style="margin-left: -10px" label="发布时间" prop="createdate">
                 <el-date-picker v-model="postForm.createdate" type="datetime" format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间" />
               </el-form-item>
             </el-col>
@@ -68,7 +68,7 @@
             <el-col :span="24">
               <div class="article-type">
                 <span class="title">文章类型：</span>
-                <el-select v-model="postForm.orginal_status" placeholder="请选择">
+                <el-select v-model="postForm.type" placeholder="请选择">
                   <el-option
                     v-for="item in articleType"
                     :key="item"
@@ -114,7 +114,7 @@ import RichTextEditor from '@/components/editor/RichTextEditor'
 import ArticleTag from '@/components/ArticleTag'
 import ArticleCategory from '@/components/ArticleCategory'
 import { getAllUser } from '@/api/user'
-import { createArticle, createArticleDraft } from '@/api/article'
+import { createArticle, createArticleDraft } from '../../api/article'
 
 const ARTICLE_TYPE = ['0', '1', '2']
 
@@ -134,11 +134,14 @@ export default {
         summary: '',
         author: '',
         createdate: new Date(),
+        images: '',
         content: '',
-        tagsList: [],
-        cateList: [],
+        categoryid: '',
+        type: '',
         privacy: false
       },
+      tagsList: [],
+      cateList: [],
       userListOptions: [],
       contentShortLength: 0,
       loading: false,
@@ -147,18 +150,21 @@ export default {
         title: [
           { required: true, message: '请输入标题', trigger: 'blur' }
         ],
-        author: [
+        /* author: [
           { required: true, message: '请选择作者', trigger: 'blur' }
-        ],
+        ],*/
         createdate: [
           { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
+        ],
+        content: [
+          { required: true, message: '请创作文章内容', trigger: 'blur' }
         ]
       }
     }
   },
   watch: {
     'postForm.summary'(old, newVal) {
-      this.contentShortLength = newVal.length
+      this.contentShortLength = newVal.length + 1
     }
   },
   methods: {
@@ -175,41 +181,61 @@ export default {
       }
     },
     changeContent(html) {
-      this.postForm.content = html
+      this.content = html
     },
     addTag(val) {
-      this.postForm.tagsList.push(val)
+      this.tagsList.push(val)
     },
     removeTag(array) {
-      this.postForm.tagsList = array
+      this.tagsList = array
     },
     handleCateChecked(checkedList) {
-      this.postForm.cateList = checkedList
+      this.cateList = checkedList
     },
     createCate(val) {
-      this.postForm.cateList.push(val)
+      this.cateList.push(val)
     },
     removeCate(array) {
-      this.postForm.cateList = array
+      this.cateList = array
     },
     submitForm() {
       // 发布博客
-      this.$refs['postForm'].validate((valid) => {
+      this.$refs['postForm'].validate(async(valid) => {
         if (valid) {
           const flag = this.validateProps()
           if (flag) {
-            // 提交数据
+            // 开始Loading
+            const loading = this.$loading({
+              lock: true,
+              text: 'Loading...',
+              spinner: 'el-icon-loading',
+              background: 'rgba(0, 0, 0, 0.7)',
+              fullscreen: false
+            })
+
             try {
-              const resp = createArticle(this.postForm)
+              // 提交数据
+              this.postForm.categoryid = this.cateList[0] // 获取categoryid
+              // 处理tagList
+              this.postForm.labelList = this.tagsList.map(item => {
+                return item.name
+              })
+
+              const resp = await createArticle(this.postForm)
               console.log(resp)
+              // $nextTick 就是延迟一段时间执行一段代码，如果对于dom的操作是等待dom更新之后，再执行里面的代码，适合使用
+              this.$nextTick(() => { // 以服务的方式调用的 Loading 需要异步关闭
+                loading.close()
+              })
               // TODO 提示成功
             } catch (e) {
+              loading.close()
               console.log(e)
               this.$message.error(`提交数据失败，系统异常`)
             }
           }
         } else {
-          console.log('error submit!!')
+          console.log('请填写信息！')
           return false
         }
       })
@@ -239,13 +265,19 @@ export default {
       let flag = true
       if (!this.postForm.content) {
         flag = false
-        this.$message.error('请填写博客内容')
-      } else if (!this.postForm.cateList) {
+        this.$message.warning('请填写博客内容')
+      } else if (this.cateList.length === 0) {
         flag = false
-        this.$message.error('请选择博客分类')
-      } else if (!this.postForm.tagsList) {
+        this.$message.warning('请选择博客分类')
+      } else if (this.tagsList.length === 0) {
         flag = false
-        this.$message.error('请设置博客标签')
+        this.$message.warning('请设置博客标签')
+      } else if (!this.postForm.title) {
+        flag = false
+        this.$message.warning('请填写标题')
+      } else if (!this.postForm.type) {
+        flag = false
+        this.$message.warning('请选择文章类型')
       }
       return flag
     }
@@ -341,6 +373,7 @@ export default {
       }
       .row2 {
         margin-top: 50px;
+        margin-bottom: 20px;
       }
       .face-image {
         font-size: 14px;

@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import request from '@/request'
 
 const getCategoryList = (page, pageSize) => {
   return request({
@@ -13,7 +13,7 @@ const getCategoryList = (page, pageSize) => {
 
 const getAllCategoryList = () => {
   return request({
-    url: '/category/allList',
+    url: '/category/category/',
     method: 'get'
   })
 }

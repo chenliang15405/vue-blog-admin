@@ -21,11 +21,12 @@ module.exports = {
     // host: '0.0.0.0',
     port: 3000,
     proxy: {
-      '/dev-api': {
-        target: ' https://www.easy-mock.com/mock/5c8c8e03800fbb7305fd80c1/example_copy',
+      '/api': {
+        // target: 'https://www.easy-mock.com/mock/5c8c8e03800fbb7305fd80c1/example_copy',
+        target: 'http://localhost:9011',
         changeOrigin: true,
         pathRewrite: {
-          '/dev-api': ''
+          '/api': ''
         }
       }
     }

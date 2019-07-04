@@ -138,6 +138,7 @@ export default {
       }
       .tags-li-icon {
         color: #666;
+        cursor: pointer;
       }
 
     }
