@@ -32,6 +32,8 @@
 </template>
 
 <script>
+import { login } from '@/api/user'
+
 export default {
   name: 'Login',
   data() {
@@ -56,9 +58,11 @@ export default {
   },
   methods: {
     submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
+      this.$refs[formName].validate(async(valid) => {
         if (valid) {
           // TODO 发送请求
+          const res = await login(this.ruleForm)
+          console.log(res)
           // localStorage.setItem('login_usernmae', this.ruleForm.username)
           // 将数据存储到vuex
           this.$store.dispatch('login/setUserInfo', { username: this.ruleForm.username, password: this.ruleForm.password })

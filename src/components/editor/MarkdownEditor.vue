@@ -2,13 +2,13 @@
   <div class="markdown-container">
     <mavon-editor
       ref=md
+      :ishljs="true"
+      :codeStyle="code_style"
+      style="height: 100%"
       @imgAdd="$imgAdd"
       @imgDel="$imgDel"
       @change="change"
       @save="save"
-      :ishljs="true"
-      :codeStyle="code_style"
-      style="height: 100%"
     >
     </mavon-editor>
   </div>
@@ -23,9 +23,14 @@ export default {
   components: {
     mavonEditor
   },
+  props: {
+    contentStr: {
+      type: String
+    }
+  },
   data() {
     return {
-      content: '',
+      content: this.contentStr || '',
       code_style: 'github'
     }
   },

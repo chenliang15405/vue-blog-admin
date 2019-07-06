@@ -1,5 +1,6 @@
 'use strict'
 // const path = require('path')
+const webpack = require('webpack')
 
 // function resolve(dir) {
 //   return path.join(__dirname, dir)
@@ -11,14 +12,14 @@ module.exports = {
   // baseUrl: './', vue-cli3已经使用publicPath
   // outputDir: 'dist',
   // publicPath: '/',
-  // outputDir: 'dist',
-  // assetsDir: 'static',
+  outputDir: 'dist', // 构建输出目录
+  assetsDir: 'assets', // 静态资源目录 (js, css, img, fonts)
   // lintOnSave: process.env.NODE_ENV === 'development',
   // 把这个改为false。不然在最终打包的文件中会出现一些map文件，map文件的作用在于：项目打包后，代码都是经过压缩加密的，如果运行时报错，输出的错误信息无法准确得知是哪里的代码报错
   productionSourceMap: false,
   devServer: {
     open: true,
-    // host: '0.0.0.0',
+    host: '0.0.0.0',
     port: 3000,
     proxy: {
       '/api': {
@@ -30,6 +31,11 @@ module.exports = {
         }
       }
     }
+  },
+  chainWebpack: config => {
+    config.plugin('provide').use(webpack.ProvidePlugin, [{
+      'window.Quill': 'quill'
+    }])
   }
   // configureWebpack: {
   //   // provide the app's title in webpack's name field, so that

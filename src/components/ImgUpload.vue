@@ -32,7 +32,6 @@
 
 <script>
 
-const FASTDFS_PREFIX_URL = 'http://132.232.104.247:9999/'
 export default {
   name: 'ImgUpload',
   data() {
@@ -51,7 +50,7 @@ export default {
       console.log('file', file)
       if (response.code === 20000) {
         this.$message.success('上传成功')
-        this.imageUrl = FASTDFS_PREFIX_URL + response.data // 上传成功返回路径
+        this.imageUrl = response.data // 上传成功返回路径
         this.imageName = file.name // 上传返回名称
       } else {
         this.$message.error('上传失败，请重新上传图片')

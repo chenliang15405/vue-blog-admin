@@ -11,8 +11,8 @@
         :show-file-list="false"
         :on-success="uploadSuccess"
         :on-error="uploadError"
-        :before-upload="beforeUpload">
-      </el-upload>
+        :before-upload="beforeUpload"
+      />
       <!-- vue-quill-editor 会将内容中的图片做base64编码处理，然后上传为文本，如果图片过大，可能会提示参数过长，
            后面可以优化为单独的上传图片到文件服务器
            Consolas和Monoca我觉得是windows上最好看的字体了
@@ -26,7 +26,7 @@
           @focus="onEditorFocus($event)"
           @ready="onEditorReady($event)"
           @change="onEditorChange($event)"
-      />
+        />
       </el-row>
     </div>
   </div>
@@ -38,8 +38,21 @@ import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
 import 'highlight.js/styles/monokai-sublime.css'
 
-import { quillEditor } from 'vue-quill-editor'
+import { quillEditor, Quill } from 'vue-quill-editor'
+import { ImageExtend } from 'quill-image-extend-module'
+import ImageResize from 'quill-image-resize-module'
+// import * as Quill from 'quill'
 import hljs from 'highlight.js'
+
+// quill编辑器的字体
+/* var fonts = ['SimSun', 'SimHei', 'Microsoft-YaHei', 'KaiTi', 'FangSong', 'Arial', 'Times-New-Roman', 'sans-serif']
+var Font = Quill.import('formats/font')
+Font.whitelist = fonts // 将字体加入到白名单
+Quill.register(Font, true)*/
+
+Quill.register('modules/ImageExtend', ImageExtend)
+// use resize module
+Quill.register('modules/ImageResize', ImageResize)
 
 const toolbarOptions = [
   ['bold', 'italic', 'underline', 'strike'],
@@ -76,6 +89,7 @@ export default {
       data: this.content || '',
       editorOption: {
         placeholder: 'Hello World',
+        theme: 'snow', // 带工具类，bubble是不带工具栏的
         modules: {
           toolbar: {
             container: toolbarOptions, // 工具栏
@@ -89,6 +103,18 @@ export default {
                   this.quill.format('image', false)
                 }
               }
+            }
+          },
+          ImageResize: {},
+          ImageExtend: {
+            loading: true,
+            name: 'file',
+            action: 'http://localhost:9002/file/image/upload', // 服务器地址, 如果action为空，则采用base64插入图片
+            headers: (xhr) => {
+            },
+            response: (res) => {
+              console.log('ImageExtend', res)
+              return res.data
             }
           },
           syntax: {
@@ -127,7 +153,7 @@ export default {
         // 获取光标所在位置
         const length = quill.getSelection().index
         // 插入图片  res.info为服务器返回的图片地址
-        quill.insertEmbed(length, 'image', 'http://132.232.104.247:9999/' + response.data)
+        quill.insertEmbed(length, 'image', response.data)
         // 调整光标到最后
         quill.setSelection(length + 1)
       } else {
