@@ -9,11 +9,11 @@
       </div>
 
       <div v-show="isShow" class="input-cate">
-        <input v-model="value" type="text" class="in" :size="inLength" @keyup.enter="saveCate" @click="editCate">
+        <input v-model="value" type="text" class="in" :size="inLength" @blur="saveCate" @keyup.enter="saveCate" @click="editCate">
         <i class="el-icon-close" @click="removeCate" />
       </div>
 
-      <div class="cate-add" @click="addCate">
+      <div class="cate-add" v-show="addCateShow" @click="addCate">
         <i class="el-icon-circle-plus" />&nbsp;添加新分类
       </div>
     </div>
@@ -25,7 +25,7 @@
           :max="1"
           @change="handleChecked"
         >
-          <el-checkbox v-for="item in optionList" :key="item.id" class="option" :label="item.id">{{ item.categoryname }}</el-checkbox>
+          <el-checkbox :disabled="newCateList.length > 0" v-for="item in optionList" :key="item.id" class="option" :label="item.id">{{ item.categoryname }}</el-checkbox>
         </el-checkbox-group>
       </div>
     </div>
@@ -38,12 +38,19 @@ import { getAllCategoryList } from '@/api/category'
 
 export default {
   name: 'ArticleCategory',
+  props: {
+    categoryList: {
+      type: Array,
+      default: () => []
+    }
+  },
   data() {
     return {
       optionList: [],
       checkedList: [],
       newCateList: [],
       isShow: false,
+      addCateShow: true,
       value: ''
     }
   },
@@ -82,17 +89,25 @@ export default {
       }
     },
     addCate() {
-      if (this.newCateList.length >= 3) {
+      // console.log(this.newCateList.length)
+      if (this.newCateList.length > 0 || this.checkedList.length > 0) {
         return
       }
       this.isShow = true
       if (this.value) {
         this.newCateList.push(this.value)
+        if (this.newCateList.length >= 1) {
+          this.addCateShow = false
+          this.isShow = false
+        }
         this.$emit('createCate', this.value)
         this.value = ''
       }
     },
     handleChecked(value) {
+      if (this.newCateList.length > 0) {
+        return
+      }
       this.checkedList = value
       this.$emit('handleChecked', this.checkedList)
     },
@@ -102,6 +117,7 @@ export default {
           return val !== item
         })
         this.$emit('removeCate', this.newCateList)
+        this.isShow = true && (this.addCateShow = true) // 针对使用一个分类
         return
       }
       this.value = ''
@@ -110,7 +126,10 @@ export default {
       if (this.value) {
         this.$emit('createCate', this.value)
         this.newCateList.push(this.value)
-        this.isShow = false
+        if (this.newCateList.length >= 1) {
+          this.addCateShow = false
+          this.isShow = false
+        }
         this.value = ''
       }
     },

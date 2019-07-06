@@ -32,7 +32,7 @@
           <el-row>
             <el-col :span="24">
               <span class="face-image">封面图：</span>
-              <img-upload />
+              <img-upload @imageUploadSuccess="imageUploadSuccess" @goRmImage="goRmImage" />
             </el-col>
           </el-row>
 
@@ -47,7 +47,7 @@
           <el-row>
             <el-col :span="24">
               <article-tag
-                :tagslist="postForm.tagsList"
+                :tagslist="postForm.labelList"
                 @addTag="addTag"
                 @removeTag="removeTag"
               />
@@ -57,6 +57,7 @@
           <el-row>
             <el-col :span="24">
               <article-category
+                :category-list="cateList"
                 @handleChecked="handleCateChecked"
                 @createCate="createCate"
                 @removeCate="removeCate"
@@ -83,7 +84,7 @@
           <el-row>
             <el-col :span="24">
               <el-switch
-                v-model="postForm.privacy"
+                v-model="postForm.ispublic"
                 style="display: block;width: 130px;"
                 active-color="#13ce66"
                 inactive-color="#ccc"
@@ -114,7 +115,7 @@ import RichTextEditor from '@/components/editor/RichTextEditor'
 import ArticleTag from '@/components/ArticleTag'
 import ArticleCategory from '@/components/ArticleCategory'
 import { getAllUser } from '@/api/user'
-import { createArticle, createArticleDraft } from '../../api/article'
+import { createArticle, createArticleDraft, deleteImageFile } from '../../api/article'
 
 const ARTICLE_TYPE = ['0', '1', '2']
 
@@ -134,11 +135,15 @@ export default {
         summary: '',
         author: '',
         createdate: new Date(),
-        images: '',
+        image: '',
         content: '',
+        textcontent: '',
         categoryid: '',
+        categoryName: '',
+        labelList: [],
         type: '',
-        privacy: false
+        ispublic: false,
+        state: '0'
       },
       tagsList: [],
       cateList: [],
@@ -180,8 +185,9 @@ export default {
         this.userListOptions = list // TODO 需要统一为data
       }
     },
-    changeContent(html) {
-      this.content = html
+    changeContent({ html, text }) {
+      this.postForm.content = html
+      this.postForm.textcontent = text
     },
     addTag(val) {
       this.tagsList.push(val)
@@ -191,12 +197,22 @@ export default {
     },
     handleCateChecked(checkedList) {
       this.cateList = checkedList
+      this.postForm.categoryid = checkedList[0]
     },
     createCate(val) {
-      this.cateList.push(val)
+      this.postForm.categoryName = val
     },
     removeCate(array) {
-      this.cateList = array
+      // this.cateList = array
+      this.postForm.categoryName = '' // 针对一个分类
+    },
+    imageUploadSuccess(url) {
+      this.postForm.image = url
+    },
+    goRmImage(url) {
+      console.log(url)
+      const resp = deleteImageFile(url)
+      console.log('rmImage', resp.data)
     },
     submitForm() {
       // 发布博客
@@ -222,12 +238,21 @@ export default {
               })
 
               const resp = await createArticle(this.postForm)
-              console.log(resp)
               // $nextTick 就是延迟一段时间执行一段代码，如果对于dom的操作是等待dom更新之后，再执行里面的代码，适合使用
               this.$nextTick(() => { // 以服务的方式调用的 Loading 需要异步关闭
                 loading.close()
               })
-              // TODO 提示成功
+              // 提示成功
+              if (resp.flag && resp.code === 20000) {
+                this.$notify({
+                  title: '成功',
+                  message: '文章发布成功',
+                  type: 'success'
+                })
+                // TODO 跳转文章发布成功页面，并可以跳转到web或者返回
+              } else {
+                this.$message.error('文章发布失败')
+              }
             } catch (e) {
               loading.close()
               console.log(e)
@@ -243,9 +268,17 @@ export default {
     saveDraft() {
       // 直接保存为草稿
       try {
+        this.postForm.state = '1' // state 1 为草稿
+        this.postForm.type = '1' // 草稿
         const resp = createArticleDraft(this.postForm)
         console.log(resp)
-      //  TODO 提示保存成功
+        if (resp.flag && resp.code === 20000) {
+          this.$notify({
+            title: '保存成功',
+            message: '文章已经保存为草稿',
+            type: 'success'
+          })
+        }
       } catch (e) {
         console.log(e)
         this.$notify({
@@ -266,7 +299,7 @@ export default {
       if (!this.postForm.content) {
         flag = false
         this.$message.warning('请填写博客内容')
-      } else if (this.cateList.length === 0) {
+      } else if (!this.postForm.categoryName && !this.postForm.categoryid) {
         flag = false
         this.$message.warning('请选择博客分类')
       } else if (this.tagsList.length === 0) {

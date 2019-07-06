@@ -36,19 +36,13 @@
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
-import 'highlight.js/styles/monokai-sublime.css'
 
 import { quillEditor, Quill } from 'vue-quill-editor'
 import { ImageExtend } from 'quill-image-extend-module'
 import ImageResize from 'quill-image-resize-module'
-// import * as Quill from 'quill'
-import hljs from 'highlight.js'
 
-// quill编辑器的字体
-/* var fonts = ['SimSun', 'SimHei', 'Microsoft-YaHei', 'KaiTi', 'FangSong', 'Arial', 'Times-New-Roman', 'sans-serif']
-var Font = Quill.import('formats/font')
-Font.whitelist = fonts // 将字体加入到白名单
-Quill.register(Font, true)*/
+import hljs from 'highlight.js'
+import 'highlight.js/styles/monokai-sublime.css'
 
 Quill.register('modules/ImageExtend', ImageExtend)
 // use resize module
@@ -94,9 +88,9 @@ export default {
           toolbar: {
             container: toolbarOptions, // 工具栏
             handlers: {
-              'image': function(value) {
+              'image': function(value) { // 处理文本框上传图片按钮
                 if (value) {
-                  alert('自定义图片')
+                  // alert('自定义图片')
                   // 触发input框选择图片文件
                   document.querySelector('.avatar-uploader input').click()
                 } else {
@@ -105,8 +99,8 @@ export default {
               }
             }
           },
-          ImageResize: {},
-          ImageExtend: {
+          ImageResize: {}, // 图片大小调整
+          ImageExtend: { // 处理直接拖图片
             loading: true,
             name: 'file',
             action: 'http://localhost:9002/file/image/upload', // 服务器地址, 如果action为空，则采用base64插入图片
@@ -137,9 +131,8 @@ export default {
       // console.log('onEditorReady')
     },
     onEditorChange({ editor, html, text }) {
-      console.log('onEditorChange', editor, html, text)
-      // TODO 新增字段，存储html和txt, 文本用于搜索
-      this.$emit('changeContent', html)
+      // console.log('onEditorChange', editor, html, text)
+      this.$emit('changeContent', { html, text })
     },
     beforeUpload(response, file) {
       // 显示loading动画

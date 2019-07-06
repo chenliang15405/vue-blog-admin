@@ -34,8 +34,20 @@ const createArticleDraft = (data) => {
   })
 }
 
+// 删除图片
+const deleteImageFile = (filePath) => {
+  return request({
+    url: '/article/file/delete',
+    method: 'delete',
+    params: {
+      filePath
+    }
+  })
+}
+
 export {
   getArticleList,
   createArticle,
-  createArticleDraft
+  createArticleDraft,
+  deleteImageFile
 }

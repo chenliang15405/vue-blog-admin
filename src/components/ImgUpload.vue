@@ -47,7 +47,6 @@ export default {
   },
   methods: {
     handleImageSuccess(response, file) {
-      console.log('file', file)
       if (response.code === 20000) {
         this.$message.success('上传成功')
         this.imageUrl = response.data // 上传成功返回路径
@@ -55,10 +54,12 @@ export default {
       } else {
         this.$message.error('上传失败，请重新上传图片')
       }
+      this.$emit('imageUploadSuccess', this.imageUrl)
       console.log('imageUrl: ', this.imageUrl)
     },
     rmImage() {
-      // TODO 去服务端删除文件
+      // 服务端删除文件
+      this.$emit('goRmImage', this.imageUrl)
       this.imageUrl = ''
       this.showList = false
     },

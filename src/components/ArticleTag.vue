@@ -9,7 +9,7 @@
       </div>
 
       <div v-show="isShow" class="input-tag">
-        <input v-model="value" type="text" class="in" :size="tagLength" @keyup.enter="saveTag" @click="editTag">
+        <input v-model="value" type="text" class="in" :size="tagLength" @blur="saveTag" @keyup.enter="saveTag" @click="editTag">
         <i class="el-icon-close" @click="removeTag" />
       </div>
 
@@ -24,6 +24,7 @@
 
 <script>
 import { rgbaColor } from '../utils/color'
+
 export default {
   name: 'ArticleTag',
   props: {
