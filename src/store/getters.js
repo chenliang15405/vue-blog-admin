@@ -5,6 +5,7 @@ const getters = {
   username: state => state.login.username,
   password: state => state.login.password,
   role: state => state.login.role,
+  token: state => state.login.token,
   collapse: state => state.home.collapse,
   theme: state => state.settings.theme,
   showSettings: state => state.settings.showSettings,

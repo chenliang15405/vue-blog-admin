@@ -27,7 +27,7 @@ import Settings from '../components/settings/Settings'
 import { mapState } from 'vuex'
 
 export default {
-  name: 'Dashboard',
+  name: 'Home',
   components: {
     'vHeader': Header,
     'vSidebar': SideBar,
@@ -41,7 +41,7 @@ export default {
     }),
     collapse() {
       const collapse = this.$store.getters.collapse
-      console.log('vuex collapse ', collapse)
+      // console.log('vuex collapse ', collapse)
       return collapse
     }
   }

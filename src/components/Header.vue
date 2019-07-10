@@ -21,7 +21,7 @@
         </el-tooltip>
       </div>
       <div class="user-avator">
-        <img src="../assets/images/img.jpg">
+        <img :src="avatar">
       </div>
       <div class="drop-menu">
         <el-dropdown class="user-name" trigger="click" placement="bottom" @command="handleCommand">
@@ -47,6 +47,7 @@
 
 <script>
 import SvgIcon from './SvgIcon'
+import { getUserInfo } from '@/api/user'
 
 export default {
   name: 'Header',
@@ -56,17 +57,19 @@ export default {
   data() {
     return {
       fullscreen: false,
-      message: 2
+      message: 2,
+      username: '',
+      avatar: ''
     }
   },
   computed: {
     // 计算属性默认的是get方法 -- get(){} 就可以简化为 username(){}
     // 如果需要提供set方法，就需要给一个属性 showLogo: { get(){}, set(){} }
-    username() {
-      const username = this.$store.state.login.username
+    loginname() {
+      const loginname = this.$store.state.login.username
       // console.log(this.$store.getters.password)
       // const username = localStorage.getItem('login_usernmae')
-      return username || '未知'
+      return loginname || '未知'
     },
     showSideBarLogo: {
       get() {
@@ -74,7 +77,21 @@ export default {
       }
     }
   },
+  mounted() {
+    this.init()
+  },
   methods: {
+    async init() {
+      try {
+        const data = await getUserInfo(this.loginname)
+        const { username, avatar } = data.data
+        this.username = username
+        this.avatar = avatar
+        // console.log('getUserInfo: ', this.username, this.avatar)
+      } catch (e) {
+        console.log('getUserInfo error', e)
+      }
+    },
     // 侧边栏折叠
     collapseChage() {
       let collapse = this.$store.getters.collapse
@@ -86,7 +103,7 @@ export default {
       if (command === 'logout') {
         // localStorage.removeItem('login_usernmae')
         await this.$store.dispatch('login/setSignOut') // 命令空间
-        this.$router.push('/login')
+        this.$router.replace('/login')
       }
     },
     // 全屏处理

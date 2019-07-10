@@ -3,9 +3,10 @@ import * as userInfo from './userInfoConstant'
 // initial state
 const state = {
   // 用户登录状态,存储在sessionStorage中，防止刷新后没了
-  username: sessionStorage.getItem('login_name') ? sessionStorage.getItem('login_name') : false,
-  password: sessionStorage.getItem('password') ? sessionStorage.getItem('password') : false,
-  role: ''
+  username: sessionStorage.getItem('login_name') ? sessionStorage.getItem('login_name') : '',
+  password: sessionStorage.getItem('password') ? sessionStorage.getItem('password') : '',
+  role: sessionStorage.getItem('role') ? sessionStorage.getItem('role') : '',
+  token: sessionStorage.getItem('token') ? sessionStorage.getItem('token') : ''
 }
 
 const actions = {
@@ -15,9 +16,22 @@ const actions = {
   setUserInfo({ commit }, res) { // 这里的res可以由页面传过来，改变底下的true或者false
     sessionStorage.setItem('login_name', res.username)
     sessionStorage.setItem('password', res.password)
-    // TODO 将role也存储在vuex中
+    sessionStorage.setItem('role', res.role)
+
     commit(userInfo.SET_LOGIN_NAME, res.username)
     commit(userInfo.SET_LOGIN_PASSWORD, res.password)
+    commit(userInfo.SET_LOGIN_ROLE, res.role)
+  },
+
+  /**
+   * 设置token令牌
+   * @param commit
+   * @param token
+   */
+  setToken({ commit }, { token }) {
+    console.log(token)
+    sessionStorage.setItem('token', token) // TODO 可以设置为localStroage
+    commit(userInfo.TOKEN, token)
   },
 
   /**
@@ -26,7 +40,12 @@ const actions = {
   setSignOut({ commit }) {
     sessionStorage.removeItem('login_name')
     sessionStorage.removeItem('password')
-    commit(userInfo.SET_LOGIN_NAME, false)
+    sessionStorage.removeItem('role')
+    sessionStorage.removeItem('token')
+    commit(userInfo.SET_LOGIN_NAME, '')
+    commit(userInfo.SET_LOGIN_PASSWORD, '')
+    commit(userInfo.SET_LOGIN_ROLE, '')
+    commit(userInfo.TOKEN, '')
   }
 
 }
@@ -34,7 +53,8 @@ const actions = {
 const getters = {
   username: state => state.username,
   password: state => state.password,
-  role: state => state.role
+  role: state => state.role,
+  token: token => state.token
 }
 
 const mutations = {
@@ -43,6 +63,12 @@ const mutations = {
   },
   [userInfo.SET_LOGIN_PASSWORD](state, pwd) {
     state.password = pwd
+  },
+  [userInfo.SET_LOGIN_ROLE](state, role) {
+    state.role = role
+  },
+  [userInfo.TOKEN](state, token) {
+    state.token = token
   }
 }
 

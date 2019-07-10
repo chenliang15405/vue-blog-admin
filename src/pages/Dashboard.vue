@@ -78,8 +78,8 @@ export default {
   },
   data() {
     return {
-      name: 'admin',
-      role: '管理员',
+      name: this.$store.state.login.username,
+      role: this.$store.getters.role,
       lineChartData: lineChartData.newVisitis
     }
   }

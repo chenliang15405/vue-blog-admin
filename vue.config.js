@@ -24,7 +24,7 @@ module.exports = {
     proxy: {
       '/api': {
         // target: 'https://www.easy-mock.com/mock/5c8c8e03800fbb7305fd80c1/example_copy',
-        target: 'http://localhost:9011',
+        target: 'http://localhost:9010',
         changeOrigin: true,
         pathRewrite: {
           '/api': ''

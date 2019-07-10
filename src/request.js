@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
-// import store from '@/store'
+import store from '@/store'
 
 // create an axios instance
 const service = axios.create({
@@ -16,10 +16,11 @@ const service = axios.create({
 service.interceptors.request.use(
   config => {
     // Do something before request is sent
-    // if (store.getters.token) {
-    //   // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
-    //   config.headers['X-Token'] = getToken()
-    // }
+    // console.log('request header token', store.getters.token)
+    if (store.getters.token) {
+    //   // 让每个请求携带token-- ['Authorization']为自定义key 请根据实际情况自行修改
+      config.headers['Authorization'] = store.getters.token
+    }
     return config
   },
   error => {
@@ -42,6 +43,10 @@ service.interceptors.response.use(
    * 以下代码均为样例，请结合自生需求加以修改，若不需要，则可删除
    */
   response => {
+    if (response.headers.token) {
+      // console.log('response', response)
+      return response
+    }
     const res = response.data
     console.log('res', res)
     if (res.code !== 20000) {
@@ -79,4 +84,5 @@ service.interceptors.response.use(
     return Promise.reject(error)
   }
 )
+
 export default service

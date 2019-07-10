@@ -2,7 +2,7 @@ import request from '@/request'
 
 function login(data) {
   return request({
-    url: '/admin/admin/login',
+    url: '/user/admin/login',
     method: 'post',
     data
   })
@@ -23,8 +23,16 @@ const getAllUser = () => {
   })
 }
 
+const getUserInfo = (loginname) => {
+  return request({
+    url: `/user/admin/info/${loginname}`,
+    method: 'get'
+  })
+}
+
 export {
   login,
   getUserList,
-  getAllUser
+  getAllUser,
+  getUserInfo
 }

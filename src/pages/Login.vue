@@ -2,30 +2,30 @@
   <div class="login-wrap">
     <div class="ms-login">
       <div class="ms-title">后台管理系统</div>
-      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="0px" class="ms-content">
+      <el-form ref="loginForm" :model="loginForm" :rules="rules" label-width="0px" class="ms-content">
         <el-form-item prop="username">
-          <el-input v-model="ruleForm.username" placeholder="username" class="input-item" />
+          <el-input v-model="loginForm.username" placeholder="username" class="input-item" />
         </el-form-item>
         <el-form-item prop="password">
           <el-input
-            v-model="ruleForm.password"
+            v-model="loginForm.password"
             type="password"
             placeholder="password"
-            @keyup.enter.native="submitForm('ruleForm')"
+            @keyup.enter.native="submitForm('loginForm')"
           />
         </el-form-item>
-        <el-form-item prop="code">
+        <!--<el-form-item prop="code">
           <el-input
-            v-model="ruleForm.code"
+            v-model="code"
             class="code"
             placeholder="code"
-            @keyup.enter.native="submitForm('ruleForm')"
+            @keyup.enter.native="submitForm('loginForm')"
           />
-        </el-form-item>
+        </el-form-item>-->
         <div class="login-btn">
-          <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
+          <el-button type="primary" @click="submitForm('loginForm')">登录</el-button>
         </div>
-        <p class="login-tips">Tips : 用户名和密码随便填。</p>
+        <p class="login-tips">Tips : 请输入用户名和密码。</p>
       </el-form>
     </div>
   </div>
@@ -38,21 +38,21 @@ export default {
   name: 'Login',
   data() {
     return {
-      ruleForm: {
+      loginForm: {
         username: 'admin',
-        password: 'admin',
-        code: '123'
+        password: 'admin'
       },
+      code: '',
       rules: {
         username: [
           { required: true, message: '请输入用户名', trigger: 'blur' }
         ],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' }
-        ],
-        code: [
-          { required: true, message: '请输入验证码', trigger: 'blur' }
         ]
+        /* code: [
+          { required: true, message: '请输入验证码', trigger: 'blur' }
+        ]*/
       }
     }
   },
@@ -60,13 +60,18 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(async(valid) => {
         if (valid) {
-          // TODO 发送请求
-          const res = await login(this.ruleForm)
-          console.log(res)
-          // localStorage.setItem('login_usernmae', this.ruleForm.username)
+          const res = await login(this.loginForm)
+          const data = res.data
           // 将数据存储到vuex
-          this.$store.dispatch('login/setUserInfo', { username: this.ruleForm.username, password: this.ruleForm.password })
-          this.$router.push('/')
+          if (data.flag && data.code === 20000) {
+            // console.log('token ', res.headers.token)
+            // TODO 如果需要做记住我的功能，需要将token存储到localstorage中
+            this.$store.dispatch('login/setUserInfo', { username: this.loginForm.username, password: this.loginForm.password })
+            this.$store.dispatch('login/setToken', res.headers)
+
+            this.$message.success('Welcome! Login Success')
+            this.$router.push('/')
+          }
         } else {
           console.log('error submit!!')
           return false
