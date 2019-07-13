@@ -10,8 +10,7 @@ const webpack = require('webpack')
 module.exports = {
 
   // baseUrl: './', vue-cli3已经使用publicPath
-  // outputDir: 'dist',
-  // publicPath: '/',
+  publicPath: './', // 这样表示相对路径， 可以部署在任意路径下，如果为 / 则执行在nginx的html的根路径下面，如果指定为/app/ ，则可以部署在/app下面，默认为/
   outputDir: 'dist', // 构建输出目录
   assetsDir: 'assets', // 静态资源目录 (js, css, img, fonts)
   // lintOnSave: process.env.NODE_ENV === 'development',
