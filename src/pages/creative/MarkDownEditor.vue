@@ -9,21 +9,21 @@
           </el-form-item>
 
           <el-form-item style="margin-bottom: 40px;" label="摘要" label-width="45px" prop="summary">
-            <el-input v-model="postForm.summary" :rows="1" type="textarea" class="article-summary" autosize placeholder="请输入文章摘要" />
+            <el-input v-model="postForm.summary" :rows="2" type="textarea" class="article-summary" autosize placeholder="请输入文章摘要" />
             <span v-show="contentShortLength" class="word-counter">{{ contentShortLength }}/100 字</span>
           </el-form-item>
 
           <el-row class="row2">
-            <el-col :span="6">
+            <!--<el-col :span="6">
               <el-form-item style="margin-bottom: 40px;" label="作者" prop="author">
                 <el-select v-model="postForm.author" :remote-method="getRemoteUserList" :loading="loading" clearable filterable default-first-option remote placeholder="搜索用户">
                   <el-option v-for="(item,index) in userListOptions" :key="item+index" :label="item" :value="item" />
                 </el-select>
               </el-form-item>
-            </el-col>
+            </el-col>-->
 
             <el-col :span="12">
-              <el-form-item style="margin: 0 0 40px 20px;" label="发布时间" prop="createdate">
+              <el-form-item style="margin-left: -10px" label="发布时间" prop="createdate">
                 <el-date-picker v-model="postForm.createdate" type="datetime" format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间" />
               </el-form-item>
             </el-col>
@@ -32,14 +32,14 @@
           <el-row>
             <el-col :span="24">
               <span class="face-image">封面图：</span>
-              <img-upload />
+              <img-upload @imageUploadSuccess="imageUploadSuccess" @goRmImage="goRmImage" />
             </el-col>
           </el-row>
 
           <el-row>
             <el-col :span="24">
               <el-form-item prop="content">
-                <markdown-editor></markdown-editor>
+                <markdown-editor @goRmImage="goRmImage" @changeContent="changeContent"></markdown-editor>
               </el-form-item>
             </el-col>
           </el-row>
@@ -47,7 +47,7 @@
           <el-row>
             <el-col :span="24">
               <article-tag
-                :tagslist="postForm.tagsList"
+                :tagslist="postForm.labelList"
                 @addTag="addTag"
                 @removeTag="removeTag"
               />
@@ -57,6 +57,7 @@
           <el-row>
             <el-col :span="24">
               <article-category
+                :category-list="cateList"
                 @handleChecked="handleCateChecked"
                 @createCate="createCate"
                 @removeCate="removeCate"
@@ -68,7 +69,7 @@
             <el-col :span="24">
               <div class="article-type">
                 <span class="title">文章类型：</span>
-                <el-select v-model="postForm.orginal_status" placeholder="请选择">
+                <el-select v-model="postForm.type" placeholder="请选择">
                   <el-option
                     v-for="item in articleType"
                     :key="item"
@@ -83,7 +84,7 @@
           <el-row>
             <el-col :span="24">
               <el-switch
-                v-model="postForm.privacy"
+                v-model="postForm.ispublic"
                 style="display: block;width: 130px;"
                 active-color="#13ce66"
                 inactive-color="#ccc"
@@ -114,7 +115,7 @@ import ImgUpload from '@/components/ImgUpload'
 import ArticleTag from '@/components/ArticleTag'
 import ArticleCategory from '@/components/ArticleCategory'
 import { getAllUser } from '@/api/user'
-import { createArticle, createArticleDraft } from '@/api/article'
+import { createArticle, createArticleDraft, deleteImageFile } from '../../api/article'
 
 const ARTICLE_TYPE = ['0', '1', '2']
 
@@ -133,11 +134,18 @@ export default {
         summary: '',
         author: '',
         createdate: new Date(),
+        image: '',
         content: '',
-        tagsList: [],
-        cateList: [],
-        privacy: false
+        textcontent: '',
+        categoryid: '',
+        categoryName: '',
+        labelList: [],
+        type: '',
+        ispublic: false,
+        state: '0'
       },
+      tagsList: [],
+      cateList: [],
       userListOptions: [],
       contentShortLength: 0,
       loading: false,
@@ -146,18 +154,21 @@ export default {
         title: [
           { required: true, message: '请输入标题', trigger: 'blur' }
         ],
-        author: [
+        /* author: [
           { required: true, message: '请选择作者', trigger: 'blur' }
-        ],
+        ],*/
         createdate: [
           { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
+        ],
+        content: [
+          { required: true, message: '请创作文章内容', trigger: 'blur' }
         ]
       }
     }
   },
   watch: {
     'postForm.summary'(old, newVal) {
-      this.contentShortLength = newVal.length
+      this.contentShortLength = newVal.length + 1
     }
   },
   methods: {
@@ -173,42 +184,88 @@ export default {
         this.userListOptions = list // TODO 需要统一为data
       }
     },
-    changeContent(html) {
+    changeContent({ html, text }) {
       this.postForm.content = html
+      this.postForm.textcontent = text
+      console.log('html', html)
+      console.log('text', text)
     },
     addTag(val) {
-      this.postForm.tagsList.push(val)
+      this.tagsList.push(val)
     },
     removeTag(array) {
-      this.postForm.tagsList = array
+      this.tagsList = array
     },
     handleCateChecked(checkedList) {
-      this.postForm.cateList = checkedList
+      this.cateList = checkedList
+      this.postForm.categoryid = checkedList[0]
     },
     createCate(val) {
-      this.postForm.cateList.push(val)
+      this.postForm.categoryName = val
     },
     removeCate(array) {
-      this.postForm.cateList = array
+      // this.cateList = array
+      this.postForm.categoryName = '' // 针对一个分类
+    },
+    imageUploadSuccess(url) {
+      this.postForm.image = url
+    },
+    async goRmImage(url) {
+      const resp = await deleteImageFile(url)
+      console.log('rmImage', resp)
+      this.$notify({
+        title: '成功',
+        message: resp.message,
+        type: resp.code === 20000 ? 'success' : 'warning'
+      })
     },
     submitForm() {
       // 发布博客
-      this.$refs['postForm'].validate((valid) => {
+      this.$refs['postForm'].validate(async(valid) => {
         if (valid) {
           const flag = this.validateProps()
           if (flag) {
-            // 提交数据
+            // 开始Loading
+            const loading = this.$loading({
+              lock: true,
+              text: 'Loading...',
+              spinner: 'el-icon-loading',
+              background: 'rgba(0, 0, 0, 0.7)',
+              fullscreen: false
+            })
+
             try {
-              const resp = createArticle(this.postForm)
-              console.log(resp)
-              // TODO 提示成功
+              // 提交数据
+              this.postForm.categoryid = this.cateList[0] // 获取categoryid
+              // 处理tagList
+              this.postForm.labelList = this.tagsList.map(item => {
+                return item.name
+              })
+
+              const resp = await createArticle(this.postForm)
+              // $nextTick 就是延迟一段时间执行一段代码，如果对于dom的操作是等待dom更新之后，再执行里面的代码，适合使用
+              this.$nextTick(() => { // 以服务的方式调用的 Loading 需要异步关闭
+                loading.close()
+              })
+              // 提示成功
+              if (resp.flag && resp.code === 20000) {
+                this.$notify({
+                  title: '成功',
+                  message: '文章发布成功',
+                  type: 'success'
+                })
+                // TODO 跳转文章发布成功页面，并可以跳转到web或者返回
+              } else {
+                this.$message.error('文章发布失败')
+              }
             } catch (e) {
+              loading.close()
               console.log(e)
               this.$message.error(`提交数据失败，系统异常`)
             }
           }
         } else {
-          console.log('error submit!!')
+          console.log('请填写信息！')
           return false
         }
       })
@@ -216,9 +273,17 @@ export default {
     saveDraft() {
       // 直接保存为草稿
       try {
+        this.postForm.state = '1' // state 1 为草稿
+        this.postForm.type = '1' // 草稿
         const resp = createArticleDraft(this.postForm)
         console.log(resp)
-        //  TODO 提示保存成功
+        if (resp.flag && resp.code === 20000) {
+          this.$notify({
+            title: '保存成功',
+            message: '文章已经保存为草稿',
+            type: 'success'
+          })
+        }
       } catch (e) {
         console.log(e)
         this.$notify({
@@ -238,13 +303,19 @@ export default {
       let flag = true
       if (!this.postForm.content) {
         flag = false
-        this.$message.error('请填写博客内容')
-      } else if (!this.postForm.cateList) {
+        this.$message.warning('请填写博客内容')
+      } else if (!this.postForm.categoryName && !this.postForm.categoryid) {
         flag = false
-        this.$message.error('请选择博客分类')
-      } else if (!this.postForm.tagsList) {
+        this.$message.warning('请选择博客分类')
+      } else if (this.tagsList.length === 0) {
         flag = false
-        this.$message.error('请设置博客标签')
+        this.$message.warning('请设置博客标签')
+      } else if (!this.postForm.title) {
+        flag = false
+        this.$message.warning('请填写标题')
+      } else if (!this.postForm.type) {
+        flag = false
+        this.$message.warning('请选择文章类型')
       }
       return flag
     }

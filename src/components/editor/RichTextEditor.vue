@@ -12,6 +12,7 @@
         :on-success="uploadSuccess"
         :on-error="uploadError"
         :before-upload="beforeUpload"
+        :headers="headers"
       />
       <!-- vue-quill-editor 会将内容中的图片做base64编码处理，然后上传为文本，如果图片过大，可能会提示参数过长，
            后面可以优化为单独的上传图片到文件服务器
@@ -77,8 +78,10 @@ export default {
   },
   data() {
     return {
-      uploadImageUrl: 'http://localhost:9002/file/upload',
-      header: '', // 传递token,
+      uploadImageUrl: 'api/file/upload',
+      headers: { // 传递token,
+        'Authorization': this.$store.getters.token
+      },
       uploadLoading: false, // 上传loading
       data: this.content || '',
       editorOption: {

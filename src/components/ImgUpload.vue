@@ -10,6 +10,7 @@
       drag
       :action="uploadImageUrl"
       :before-upload="uploadLimit"
+      :headers="headers"
     >
       <i class="el-icon-upload" />
       <div class="el-upload__text">
@@ -39,10 +40,13 @@ export default {
       dataObj: {
 
       },
-      uploadImageUrl: 'http://localhost:9002/file/upload',
+      uploadImageUrl: 'api/article/file/upload',
       imageUrl: '',
       imageName: '',
-      showList: false
+      showList: false,
+      headers: {
+        'Authorization': this.$store.getters.token
+      }
     }
   },
   methods: {
@@ -65,14 +69,14 @@ export default {
     },
     uploadLimit(file) {
       const isType = file.type === 'image/jpeg' || file.type === 'image/png'
-      const isLt10M = file.size / 1024 / 1024 < 10 // 大小限定为10M
+      const isLt20M = file.size / 1024 / 1024 < 20 // 大小限定为10M
       if (!isType) {
         this.$message.error('上传图片只能是 JPG/PNG 格式!')
       }
-      if (!isLt10M) {
-        this.$message.error('上传头像图片大小不能超过 10MB!')
+      if (!isLt20M) {
+        this.$message.error('上传头像图片大小不能超过 20MB!')
       }
-      return isType && isLt10M
+      return isType && isLt20M
     }
   }
 }

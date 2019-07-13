@@ -29,7 +29,6 @@ const actions = {
    * @param token
    */
   setToken({ commit }, { token }) {
-    console.log(token)
     sessionStorage.setItem('token', token) // TODO 可以设置为localStroage
     commit(userInfo.TOKEN, token)
   },

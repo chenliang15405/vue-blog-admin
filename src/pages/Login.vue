@@ -23,7 +23,7 @@
           />
         </el-form-item>-->
         <div class="login-btn">
-          <el-button type="primary" @click="submitForm('loginForm')">登录</el-button>
+          <el-button type="primary" @click="submitForm('loginForm')" :loading="loginLoading">登录</el-button>
         </div>
         <p class="login-tips">Tips : 请输入用户名和密码。</p>
       </el-form>
@@ -33,6 +33,7 @@
 
 <script>
 import { login } from '@/api/user'
+import { Message } from 'element-ui'
 
 export default {
   name: 'Login',
@@ -42,6 +43,7 @@ export default {
         username: 'admin',
         password: 'admin'
       },
+      loginLoading: false,
       code: '',
       rules: {
         username: [
@@ -60,6 +62,7 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(async(valid) => {
         if (valid) {
+          this.loginLoading = true
           const res = await login(this.loginForm)
           const data = res.data
           // 将数据存储到vuex
@@ -69,8 +72,16 @@ export default {
             this.$store.dispatch('login/setUserInfo', { username: this.loginForm.username, password: this.loginForm.password })
             this.$store.dispatch('login/setToken', res.headers)
 
-            this.$message.success('Welcome! Login Success')
+            this.loginLoading = false
             this.$router.push('/')
+            this.$message.success('Welcome To TangSong Blog!')
+          } else {
+            this.loginLoading = false
+            Message({
+              message: '用户名或密码错误',
+              type: 'error',
+              duration: 1000
+            })
           }
         } else {
           console.log('error submit!!')

@@ -48,15 +48,22 @@ service.interceptors.response.use(
       return response
     }
     const res = response.data
-    console.log('res', res)
+    // console.log('res', res)
     if (res.code !== 20000) {
+      // 20002:密码错误;
+      if (res.code === 20002) {
+        // 直接返回对象
+        return res
+      }
+
       Message({
         message: res.message || 'error',
         type: 'error',
         duration: 5 * 1000
       })
-      // 50008:非法的token; 50012:其他客户端登录了;  50014:Token 过期了;
-      if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
+
+      //  20001:失败;  20003:权限不足;
+      if (res.code === 20003) {
         // 请自行在引入 MessageBox
         // import { Message, MessageBox } from 'element-ui'
         MessageBox.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
@@ -64,6 +71,7 @@ service.interceptors.response.use(
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
+          // TODO 重新登录
           // store.dispatch('user/resetToken').then(() => {
           //   location.reload() // 为了重新实例化vue-router对象 避免bug
           // })
@@ -75,6 +83,7 @@ service.interceptors.response.use(
     }
   },
   error => {
+    // 如果返回的不是JSON数据格式，就会进入error
     console.log('err' + error) // for debug
     Message({
       message: error.message,
