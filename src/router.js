@@ -68,6 +68,11 @@ export default new Router({
           path: '/fileupload',
           component: resolve => require(['./pages/FileUpload.vue'], resolve),
           meta: { title: '文件资源' }
+        },
+        {
+          path: '/published',
+          component: resolve => require(['./pages/PublishSuccess.vue'], resolve),
+          meta: { title: '发布成功' }
         }
       ]
     }

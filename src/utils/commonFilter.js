@@ -1,7 +1,7 @@
 
 // 时间格式过滤器
 const parseTime = (dateStr, format) => {
-  if (!time) {
+  if (!dateStr) {
     return null
   }
   console.log(dateStr, format)

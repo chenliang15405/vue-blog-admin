@@ -1,5 +1,5 @@
 const parseTime = (dateStr, format) => {
-  if (!time) {
+  if (!dateStr) {
     return null
   }
   console.log(dateStr, format)

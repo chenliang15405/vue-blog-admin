@@ -6,14 +6,14 @@
       <el-col :span="8">
         <el-card shadow="hover" class="mgb20">
           <div class="user-info">
-            <img src="../assets/images/img.jpg" class="user-avator" alt="">
+            <img :src="avatar" class="user-avator" alt="">
             <div class="user-info-cont">
-              <div class="user-info-name">{{ name }}</div>
+              <div class="user-info-name">{{ username }}</div>
               <div>{{ role }}</div>
             </div>
           </div>
           <div class="user-info-list"><span>上次登录时间：2018-01-01</span></div>
-          <div class="user-info-list"><span>上次登录地点：东莞</span></div>
+          <div class="user-info-list"><span>上次登录地点：上海</span></div>
         </el-card>
 
         <el-card shadow="hover" class="mgb20">
@@ -60,6 +60,8 @@ import ReadChart from '../components/charts/ReadChart'
 import TodoList from '../components/todo/TodoList'
 import GithubCorner from '../components/GithubCorner'
 
+import { getUserInfo } from '../api/user'
+
 const lineChartData = {
   newVisitis: {
     expectedData: [100, 120, 161, 134, 105, 160, 165],
@@ -76,11 +78,29 @@ export default {
     TodoList,
     GithubCorner
   },
+  mounted() {
+    this.init()
+  },
   data() {
     return {
-      name: this.$store.state.login.username,
+      username: this.$store.state.login.username,
       role: this.$store.getters.role,
-      lineChartData: lineChartData.newVisitis
+      lineChartData: lineChartData.newVisitis,
+      avatar: ''
+    }
+  },
+  methods: {
+    async init() {
+      console.log(this.$store.getters.role)
+      try {
+        const data = await getUserInfo(this.$store.state.login.username)
+        const { username, avatar } = data.data
+        this.username = username
+        this.avatar = avatar
+        // console.log('getUserInfo: ', this.username, this.avatar)
+      } catch (e) {
+        console.log('getUserInfo error', e)
+      }
     }
   }
 }

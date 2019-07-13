@@ -69,7 +69,7 @@ export default {
           if (data.flag && data.code === 20000) {
             // console.log('token ', res.headers.token)
             // TODO 如果需要做记住我的功能，需要将token存储到localstorage中
-            this.$store.dispatch('login/setUserInfo', { username: this.loginForm.username, password: this.loginForm.password })
+            this.$store.dispatch('login/setUserInfo', { username: this.loginForm.username, password: this.loginForm.password, role: data.data.role })
             this.$store.dispatch('login/setToken', res.headers)
 
             this.loginLoading = false

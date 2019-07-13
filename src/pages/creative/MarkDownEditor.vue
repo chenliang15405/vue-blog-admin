@@ -39,7 +39,7 @@
           <el-row>
             <el-col :span="24">
               <el-form-item prop="content">
-                <markdown-editor @goRmImage="goRmImage" @changeContent="changeContent"></markdown-editor>
+                <markdown-editor @goRmImage="goRmImage" @changeContent="changeContent" />
               </el-form-item>
             </el-col>
           </el-row>
@@ -187,8 +187,6 @@ export default {
     changeContent({ html, text }) {
       this.postForm.content = html
       this.postForm.textcontent = text
-      console.log('html', html)
-      console.log('text', text)
     },
     addTag(val) {
       this.tagsList.push(val)
@@ -254,7 +252,13 @@ export default {
                   message: '文章发布成功',
                   type: 'success'
                 })
-                // TODO 跳转文章发布成功页面，并可以跳转到web或者返回
+                // 跳转文章发布成功页面，并可以跳转到web或者返回
+                this.$router.push({
+                  path: '/published',
+                  query: {
+                    title: this.postForm.title
+                  }
+                })
               } else {
                 this.$message.error('文章发布失败')
               }
@@ -282,6 +286,13 @@ export default {
             title: '保存成功',
             message: '文章已经保存为草稿',
             type: 'success'
+          })
+          // 跳转路由
+          this.$router.push({
+            path: '/published',
+            query: {
+              title: this.postForm.title
+            }
           })
         }
       } catch (e) {
