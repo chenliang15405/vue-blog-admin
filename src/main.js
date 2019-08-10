@@ -24,6 +24,7 @@ Vue.use(ElementUI, {
   size: Cookies.get('size') || 'medium'
 })
 
+// 过滤器全局配置，自动挂载
 // 导出的是对象，可以直接通过 key 和 value 来获得过滤器的名和过滤器的方法
 Object.keys(customFilter).forEach(key => {
   Vue.filter(key, customFilter[key])
