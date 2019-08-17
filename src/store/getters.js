@@ -10,7 +10,8 @@ const getters = {
   theme: state => state.settings.theme,
   showSettings: state => state.settings.showSettings,
   tagsView: state => state.settings.tagsView,
-  sidebarLogo: state => state.settings.sidebarLogo
+  sidebarLogo: state => state.settings.sidebarLogo,
+  messageNum: state => state.home.messageNum
 }
 
 export default getters

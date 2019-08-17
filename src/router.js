@@ -74,6 +74,11 @@ export default new Router({
           path: '/published',
           component: resolve => require(['./pages/PublishSuccess.vue'], resolve),
           meta: { title: '发布成功' }
+        },
+        {
+          path: '/bloggerMessage',
+          component: resolve => require(['./pages/BloggerMessage.vue'], resolve),
+          meta: { title: '消息通知' }
         }
       ]
     }

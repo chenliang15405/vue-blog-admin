@@ -15,9 +15,10 @@
           <svg-icon icon-class="box" class="fullscreen-icon" />
         </el-tooltip>
       </div>
-      <div class="btn-message-tip" @click="messageTips">
-        <el-tooltip class="btn-message-tip" effect="dark" :content="message ? `有${message}条消息` :`消息中心`" placement="bottom">
-          <svg-icon icon-class="o" class="fullscreen-icon" />
+      <div class="btn-message-tip">
+        <div :class="messageNum > 0 ? 'red-point': ''" ></div>
+        <el-tooltip class="btn-message-tip-icon" effect="dark" :content="messageNum ? `有${messageNum}条消息` :`消息中心`" placement="bottom">
+          <svg-icon icon-class="o" class="fullscreen-icon" @click.native="messageTips"/>
         </el-tooltip>
       </div>
       <div class="user-avator">
@@ -47,7 +48,7 @@
 
 <script>
 import SvgIcon from './SvgIcon'
-import { getUserInfo } from '@/api/user'
+import { getBloggerInfo, getBloggerMessageNotify } from '@/api/user'
 
 export default {
   name: 'Header',
@@ -57,9 +58,10 @@ export default {
   data() {
     return {
       fullscreen: false,
-      message: 2,
       username: '',
-      avatar: ''
+      avatar: '',
+      messageNum: 0,
+      messageList: []
     }
   },
   computed: {
@@ -77,19 +79,37 @@ export default {
       }
     }
   },
+  watch: {
+    // 监听store中的数据是否改变 需要使用''包裹
+    '$store.getters.messageNum'() {
+      this.messageNum = this.$store.getters.messageNum
+    }
+  },
   mounted() {
     this.init()
+    this.bloggerMessage()
   },
   methods: {
     async init() {
       try {
-        const data = await getUserInfo(this.loginname)
+        const data = await getBloggerInfo(this.loginname)
         const { username, avatar } = data.data
         this.username = username
         this.avatar = avatar
         // console.log('getUserInfo: ', this.username, this.avatar)
       } catch (e) {
-        console.log('getUserInfo error', e)
+        console.log('getBloggerInfo error', e)
+      }
+    },
+    async bloggerMessage() {
+      const NOT_READ = 0
+      try {
+        const resp = await getBloggerMessageNotify(NOT_READ)
+        if (resp.code === 20000) {
+          this.handlerBloggerMessage(resp.data)
+        }
+      } catch (e) {
+        console.log('bloggerMessage error', e)
       }
     },
     // 侧边栏折叠
@@ -136,7 +156,12 @@ export default {
     },
     // 消息提示
     messageTips() {
-      // TODO 消息提示
+      this.$router.push({ path: '/bloggerMessage' })
+    },
+    handlerBloggerMessage(data) {
+      this.messageNum = data.length
+      this.messageList = data
+      this.$store.dispatch('home/changeMessage', data.length)
     }
   }
 }
@@ -178,6 +203,17 @@ export default {
     }
     .btn-message-tip {
       margin: 0 10px 0 10px;
+      position: relative;
+    }
+    .red-point {
+      height: 8px;
+      width: 8px;
+      position: absolute;
+      top: 2px;
+      right: 3px;
+      background-color: #f56c6c;
+      border-radius: 50%;
+      animation: buling 2s infinite linear;
     }
     .fullscreen-icon {
       font-size: 22px;
@@ -192,6 +228,16 @@ export default {
       margin: 0 30px 0 20px;
     }
 
+  }
+
+  @keyframes buling {
+    0% {
+      transform: scale(1.0);
+    }
+    100% {
+      transform: scale(1.1);
+      opacity: 0;
+    }
   }
 
 </style>

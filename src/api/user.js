@@ -23,10 +23,31 @@ const getAllUser = () => {
   })
 }
 
-const getUserInfo = (loginname) => {
+const getBloggerInfo = (loginname) => {
   return request({
     url: `/user/admin/info/${loginname}`,
     method: 'get'
+  })
+}
+
+const getBloggerMessageNotify = (status) => {
+  return request({
+    url: `/user/admin/blogger/message`,
+    method: 'get',
+    params: {
+      status
+    }
+  })
+}
+
+const updateBloggerMessageStatus = (id, status) => {
+  return request({
+    url: '/user/admin/blogger/message',
+    method: 'put',
+    params: {
+      id,
+      status
+    }
   })
 }
 
@@ -34,5 +55,7 @@ export {
   login,
   getUserList,
   getAllUser,
-  getUserInfo
+  getBloggerInfo,
+  getBloggerMessageNotify,
+  updateBloggerMessageStatus
 }

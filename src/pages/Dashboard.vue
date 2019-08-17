@@ -60,7 +60,7 @@ import ReadChart from '../components/charts/ReadChart'
 import TodoList from '../components/todo/TodoList'
 import GithubCorner from '../components/GithubCorner'
 
-import { getUserInfo } from '../api/user'
+import { getBloggerInfo } from '../api/user'
 
 const lineChartData = {
   newVisitis: {
@@ -93,7 +93,7 @@ export default {
     async init() {
       console.log(this.$store.getters.role)
       try {
-        const data = await getUserInfo(this.$store.state.login.username)
+        const data = await getBloggerInfo(this.$store.state.login.username)
         const { username, avatar } = data.data
         this.username = username
         this.avatar = avatar

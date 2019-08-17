@@ -4,7 +4,7 @@ const parseTime = (dateStr, format) => {
   if (!dateStr) {
     return null
   }
-  console.log(dateStr, format)
+  // console.log(dateStr, format)
   var time = new Date(dateStr)
   const year = time.getFullYear().toString().padStart(2, '0')
   const month = (time.getMonth() + 1).toString().padStart(2, '0')
