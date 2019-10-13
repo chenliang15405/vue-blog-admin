@@ -51,11 +51,22 @@ const updateBloggerMessageStatus = (id, status) => {
   })
 }
 
+const getUserInfo = (token) => {
+  return request({
+    url: '/user/admin/getUserInfo',
+    method: 'post',
+    data: {
+      token: token
+    }
+  })
+}
+
 export {
   login,
   getUserList,
   getAllUser,
   getBloggerInfo,
   getBloggerMessageNotify,
-  updateBloggerMessageStatus
+  updateBloggerMessageStatus,
+  getUserInfo
 }

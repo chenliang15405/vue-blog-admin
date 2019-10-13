@@ -14,7 +14,7 @@ module.exports = {
   publicPath: './', // 这样表示相对路径， 可以部署在任意路径下，如果为 / 则只能在nginx的html的根路径下面，如果指定为/app/ ，则可以部署在/app下面，默认为/
   outputDir: 'dist', // 构建输出目录
   assetsDir: 'assets', // 静态资源目录 (js, css, img, fonts)
-  // lintOnSave: process.env.NODE_ENV === 'development',
+  lintOnSave: process.env.ENV === 'development',
   // 把这个改为false。不然在最终打包的文件中会出现一些map文件，map文件的作用在于：项目打包后，代码都是经过压缩加密的，如果运行时报错，输出的错误信息无法准确得知是哪里的代码报错
   productionSourceMap: false,
   devServer: {

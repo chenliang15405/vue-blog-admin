@@ -209,10 +209,15 @@ export default {
     imageUploadSuccess(url) {
       this.postForm.image = url
     },
-    goRmImage(url) {
-      console.log(url)
-      const resp = deleteImageFile(url)
-      console.log('rmImage', resp.data)
+    async goRmImage(url) {
+      this.$NProgress.start()
+      const resp = await deleteImageFile(url)
+      this.$NProgress.done()
+      this.$notify({
+        title: '成功',
+        message: resp.message,
+        type: resp.code === 20000 ? 'success' : 'warning'
+      })
     },
     submitForm() {
       // 发布博客

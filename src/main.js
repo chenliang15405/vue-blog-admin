@@ -13,12 +13,19 @@ import store from './store'
 // import '../static/css/theme-green/index.css';       // 浅绿色主题
 // import './components/common/directives'
 
+import NProgress from 'nprogress' // progress bar
+import 'nprogress/nprogress.css' // progress bar style
+NProgress.inc()
+NProgress.configure({ ease: 'ease', speed: 500, showSpinner: false }) // NProgress Configuration
+
 import './assets/font/iconfont.css'
 import '@/assets/css/transition.scss' // global transition css
 
 import router from './router'
 
-import * as customFilter from './utils/commonFilter'
+import './permission' // permission control
+
+import * as customFilter from './utils/commonFilter' // customer filter js to auto registry
 
 Vue.use(ElementUI, {
   size: Cookies.get('size') || 'medium'
@@ -30,6 +37,7 @@ Object.keys(customFilter).forEach(key => {
   Vue.filter(key, customFilter[key])
 })
 
+Vue.prototype.$NProgress = NProgress
 Vue.prototype.$axios = axios
 
 Vue.config.productionTip = false

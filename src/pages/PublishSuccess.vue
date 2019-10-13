@@ -34,6 +34,8 @@
 * 还有一个是router.js中配置的 /path/:id 这种跳转链接，通过 this.$route.params.id 获取
 *
 */
+import defaultSetting from '@/settings'
+
 export default {
   name: 'PublishSuccess',
   data() {
@@ -50,7 +52,7 @@ export default {
       this.$router.go(-1)
     },
     toSeeBlog() {
-      window.location.href = 'http://132.232.104.247'
+      window.location.href = defaultSetting.blogWebUrl
     }
   }
 }

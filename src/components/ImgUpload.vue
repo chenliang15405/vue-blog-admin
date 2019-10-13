@@ -40,7 +40,7 @@ export default {
       dataObj: {
 
       },
-      uploadImageUrl: 'api/article/file/upload',
+      uploadImageUrl: `${process.env.VUE_APP_BASE_API}/article/file/upload`,
       imageUrl: '',
       imageName: '',
       showList: false,
@@ -51,6 +51,7 @@ export default {
   },
   methods: {
     handleImageSuccess(response, file) {
+      this.$NProgress.done()
       if (response.code === 20000) {
         this.$message.success('上传成功')
         this.imageUrl = response.data // 上传成功返回路径
@@ -59,7 +60,6 @@ export default {
         this.$message.error('上传失败，请重新上传图片')
       }
       this.$emit('imageUploadSuccess', this.imageUrl)
-      console.log('imageUrl: ', this.imageUrl)
     },
     rmImage() {
       // 服务端删除文件
@@ -68,12 +68,15 @@ export default {
       this.showList = false
     },
     uploadLimit(file) {
+      this.$NProgress.start()
       const isType = file.type === 'image/jpeg' || file.type === 'image/png'
-      const isLt20M = file.size / 1024 / 1024 < 20 // 大小限定为10M
+      const isLt20M = file.size / 1024 / 1024 < 20 // 大小限定为20M
       if (!isType) {
+        this.$NProgress.done()
         this.$message.error('上传图片只能是 JPG/PNG 格式!')
       }
       if (!isLt20M) {
+        this.$NProgress.done()
         this.$message.error('上传头像图片大小不能超过 20MB!')
       }
       return isType && isLt20M

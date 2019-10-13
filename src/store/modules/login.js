@@ -1,4 +1,5 @@
 import * as userInfo from './userInfoConstant'
+import { getUserInfo } from '../../api/user'
 
 // initial state
 const state = {
@@ -45,6 +46,36 @@ const actions = {
     commit(userInfo.SET_LOGIN_PASSWORD, '')
     commit(userInfo.SET_LOGIN_ROLE, '')
     commit(userInfo.TOKEN, '')
+  },
+
+  /**
+   * 异步通过token获取用户数据
+   */
+  getInfo({ commit, state }) {
+    return new Promise((resolve, reject) => {
+      getUserInfo(state.getters.token).then(response => {
+        console.log('getuserinfo : ', response)
+        const { data } = response
+
+        if (!data) {
+          reject('Verification failed, please Login again.')
+        }
+
+        const { role, usernmae, password } = data
+
+        // roles must be a non-empty array
+        if (!role || role.length <= 0) {
+          reject('getInfo: roles must be a non-null array!')
+        }
+
+        commit(userInfo.SET_LOGIN_NAME, role)
+        commit(userInfo.SET_LOGIN_PASSWORD, usernmae)
+        commit(userInfo.SET_LOGIN_ROLE, password)
+        resolve(data)
+      }).catch(error => {
+        reject(error)
+      })
+    })
   }
 
 }

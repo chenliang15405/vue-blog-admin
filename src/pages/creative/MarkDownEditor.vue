@@ -209,8 +209,9 @@ export default {
       this.postForm.image = url
     },
     async goRmImage(url) {
+      this.$NProgress.start()
       const resp = await deleteImageFile(url)
-      console.log('rmImage', resp)
+      this.$NProgress.done()
       this.$notify({
         title: '成功',
         message: resp.message,

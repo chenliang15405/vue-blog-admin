@@ -1,5 +1,5 @@
 module.exports = {
-  title: 'Vue Element Admin',
+  title: 'TangSong Blog Admin',
 
   /**
    * @type {boolean} true | false
@@ -31,5 +31,12 @@ module.exports = {
    * The default is only used in the production env
    * If you want to also use it in dev, you can pass ['production', 'development']
    */
-  errorLog: 'production'
+  errorLog: 'production',
+
+  /**
+   * @type {string} 'http://47.98.232.143/blog'
+   * @description The default web blog URL, when publish success and redirect to read
+   */
+  blogWebUrl: 'http://47.98.232.143/blog'
+
 }
