@@ -2,6 +2,10 @@
 // const path = require('path')
 const webpack = require('webpack')
 
+const CompressionPlugin = require('compression-webpack-plugin') // 压缩js、css
+// 定义压缩文件类型
+const productionGzipExtensions = ['js', 'css']
+
 // function resolve(dir) {
 //   return path.join(__dirname, dir)
 // }
@@ -33,9 +37,64 @@ module.exports = {
     }
   },
   chainWebpack: config => {
+    // Quill 配置
     config.plugin('provide').use(webpack.ProvidePlugin, [{
       'window.Quill': 'quill'
     }])
+    // 添加分析工具
+    if (process.env.NODE_ENV === 'production') {
+      if (process.env.npm_config_report) {
+        config
+          .plugin('webpack-bundle-analyzer')
+          .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
+          .end()
+        config.plugins.delete('prefetch')
+      }
+    }
+    config.plugins.delete('prefetch')
+    config.optimization.minimize(true) // 配置压缩代码
+    config.optimization.splitChunks({ // js,css代码分割
+      chunks: 'all'
+    })
+    // 开启使用外部文件，cdn
+    if (process.env.NODE_ENV === 'production') {
+      config.externals({
+        'vue': 'Vue',
+        'vuex': 'Vuex',
+        'vue-router': 'VueRouter',
+        'axios': 'axios',
+        'element-ui': 'ELEMENT'
+      })
+    }
+    // 开启js、css压缩
+    if (process.env.NODE_ENV === 'production') {
+      config.plugin('compressionPlugin')
+        .use(new CompressionPlugin({
+          test: /\.js$|\.html$|.\css/, // 匹配文件名
+          threshold: 10240, // 对超过10k的数据压缩
+          deleteOriginalAssets: false // 不删除源文件
+        }))
+      // 注入不同的模版, production使用的是CDN
+      config.plugin('html')
+        .tap(args => {
+          args[0].template = 'public/index.prod.html'
+          return args
+        })
+    }
+  },
+  css: {
+    extract: true
+  },
+  configureWebpack: {
+    plugins: [
+      new CompressionPlugin({
+        filename: '[path].gz[query]',
+        algorithm: 'gzip',
+        test: new RegExp('\\.(' + productionGzipExtensions.join('|') + ')$'),
+        threshold: 10240,
+        minRatio: 0.8
+      })
+    ]
   }
   // configureWebpack: {
   //   // provide the app's title in webpack's name field, so that

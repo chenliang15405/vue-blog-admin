@@ -1,6 +1,6 @@
 <template>
   <div class="pagination" :class="{'hidden':hidden}">
-    <!--sync修饰符，可以通过自组件去修改父组件，刷新父组件内容-->
+    <!--sync修饰符，可以通过子组件去修改父组件，刷新父组件内容-->
     <el-pagination
       :current-page.sync="currentPage"
       :page-size.sync="pageSize"

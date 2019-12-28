@@ -4,8 +4,11 @@ import App from './App.vue'
 import Cookies from 'js-cookie'
 
 import axios from 'axios'
-import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'// 默认主题
+import ELEMENT from 'element-ui'
+// import 'element-ui/lib/theme-chalk/index.css'// 默认主题
+if (process.env.NODE_ENV === 'development') { // production环境使用的是cdn
+  require('element-ui/lib/theme-chalk/index.css')
+}
 
 import 'es6-promise/auto'
 
@@ -27,7 +30,7 @@ import './permission' // permission control
 
 import * as customFilter from './utils/commonFilter' // customer filter js to auto registry
 
-Vue.use(ElementUI, {
+Vue.use(ELEMENT, {
   size: Cookies.get('size') || 'medium'
 })
 
